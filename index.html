@@ -27,7 +27,7 @@
             slate: '#a8a6a5'
           },
           fontFamily: {
-            display: ['Cormorant Garamond', 'Georgia', 'serif'],
+            display: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
             sans: ['Inter', 'system-ui', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace']
           }
@@ -36,10 +36,10 @@
     }
   </script>
 
-  <!-- Typography: Cormorant Garamond + Inter + JetBrains Mono -->
+  <!-- Typography: Plus Jakarta Sans + Inter + JetBrains Mono (Professional Sans-Serif) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Animation Engines -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1275,7 +1275,7 @@
             p.vx *= p.drag;
             p.vy *= p.drag;
             p.vy += p.gravity;
-            p.x += p.vx;
+            p.x += p.vy;
             p.y += p.vy;
             p.rotation += p.rotSpeed;
 
