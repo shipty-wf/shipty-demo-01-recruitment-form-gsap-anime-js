@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,13 +40,64 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
 
   <style>
+    /* Custom Cursor Reset */
     * {
       cursor: none !important;
     }
     html, body {
-      background-color: #08080a;
       overflow-x: hidden;
       font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Light Mode Palette */
+    html.light {
+      color-scheme: light;
+    }
+    html.light body {
+      background-color: #f8f9fb;
+      color: #09090b;
+    }
+    html.light .noise-layer {
+      opacity: 0.02;
+      filter: invert(1);
+    }
+    html.light #ambient-light {
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, rgba(99, 102, 241, 0) 70%);
+    }
+    html.light #cursor-follower {
+      border: 1px solid rgba(0, 0, 0, 0.45);
+    }
+    html.light #cursor-dot {
+      background: #09090b;
+    }
+    html.light #cursor-label {
+      color: #ffffff;
+    }
+
+    /* Dark Mode Palette */
+    html.dark {
+      color-scheme: dark;
+    }
+    html.dark body {
+      background-color: #08080a;
+      color: #f4f4f5;
+    }
+    html.dark .noise-layer {
+      opacity: 0.035;
+      filter: none;
+    }
+    html.dark #ambient-light {
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0) 70%);
+    }
+    html.dark #cursor-follower {
+      border: 1px solid rgba(255, 255, 255, 0.45);
+    }
+    html.dark #cursor-dot {
+      background: #ffffff;
+    }
+    html.dark #cursor-label {
+      color: #08080a;
     }
 
     /* Film Grain Noise Texture */
@@ -57,7 +108,6 @@
       height: 100%;
       pointer-events: none;
       z-index: 999;
-      opacity: 0.035;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 
@@ -70,20 +120,18 @@
       height: 600px;
       border-radius: 50%;
       pointer-events: none;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0) 70%);
       transform: translate(-50%, -50%);
       z-index: 1;
       will-change: transform;
     }
 
-    /* Custom Crency Cursor */
+    /* Custom Cursor Follower */
     #cursor-follower {
       position: fixed;
       top: 0;
       left: 0;
       width: 38px;
       height: 38px;
-      border: 1px solid rgba(255, 255, 255, 0.45);
       border-radius: 50%;
       pointer-events: none;
       z-index: 10000;
@@ -103,7 +151,6 @@
       left: 0;
       width: 6px;
       height: 6px;
-      background: #ffffff;
       border-radius: 50%;
       pointer-events: none;
       z-index: 10001;
@@ -114,7 +161,6 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 9px;
       font-weight: 700;
-      color: #08080a;
       letter-spacing: 0.05em;
       opacity: 0;
       transition: opacity 0.2s ease;
@@ -149,16 +195,39 @@
 
     /* 3D Tilt Card */
     .tilt-card {
-      transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.15s ease-out;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.15s ease-out, background-color 0.3s ease;
       transform-style: preserve-3d;
       will-change: transform;
     }
-    .tilt-card-active {
+    html.light .tilt-card {
+      background-color: #ffffff;
+      border-color: #e4e4e7;
+    }
+    html.light .tilt-card:hover {
+      border-color: #71717a;
+    }
+    html.light .tilt-card-active {
+      border-color: #09090b !important;
+      box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.12) !important;
+      background: #ffffff !important;
+    }
+    html.light .tilt-card-active .role-badge {
+      background: #09090b !important;
+      color: #ffffff !important;
+    }
+    html.dark .tilt-card {
+      background-color: #15151b;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    html.dark .tilt-card:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    html.dark .tilt-card-active {
       border-color: #a3e635 !important;
-      box-shadow: 0 0 35px rgba(163, 230, 53, 0.18);
+      box-shadow: 0 0 35px rgba(163, 230, 53, 0.18) !important;
       background: rgba(21, 21, 27, 0.9) !important;
     }
-    .tilt-card-active .role-badge {
+    html.dark .tilt-card-active .role-badge {
       background: #a3e635 !important;
       color: #08080a !important;
     }
@@ -167,7 +236,29 @@
     .pill-skill {
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .pill-skill.selected {
+    html.light .pill-skill {
+      background-color: #ffffff;
+      border-color: #e4e4e7;
+      color: #3f3f46;
+    }
+    html.light .pill-skill:hover {
+      border-color: #71717a;
+    }
+    html.light .pill-skill.selected {
+      background-color: #09090b !important;
+      color: #ffffff !important;
+      border-color: #09090b !important;
+      font-weight: 700;
+    }
+    html.dark .pill-skill {
+      background-color: #111115;
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #d4d4d8;
+    }
+    html.dark .pill-skill:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    html.dark .pill-skill.selected {
       background-color: #f4f4f5 !important;
       color: #08080a !important;
       border-color: #f4f4f5 !important;
@@ -180,8 +271,15 @@
       width: 16px;
       height: 16px;
       border-radius: 50%;
-      background: #a3e635;
       cursor: pointer;
+    }
+    html.light input[type="range"]::-webkit-slider-thumb {
+      background: #09090b;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+      border: 2px solid #ffffff;
+    }
+    html.dark input[type="range"]::-webkit-slider-thumb {
+      background: #a3e635;
       box-shadow: 0 0 14px rgba(163, 230, 53, 0.6);
       border: 2px solid #08080a;
     }
@@ -196,7 +294,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen text-chalk flex flex-col justify-between relative selection:bg-acid selection:text-noir">
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-zinc-900 selection:text-white dark:selection:bg-acid dark:selection:text-noir">
 
   <!-- Grain Shader Layer -->
   <div class="noise-layer"></div>
@@ -214,61 +312,72 @@
   <canvas id="confetti-canvas"></canvas>
 
   <!-- Top Navigation -->
-  <header class="w-full border-b border-white/10 px-6 md:px-12 py-5 flex items-center justify-between relative z-30 bg-noir/80 backdrop-blur-xl">
+  <header class="w-full border-b border-zinc-200 dark:border-white/10 px-6 md:px-12 py-5 flex items-center justify-between relative z-30 bg-white/80 dark:bg-noir/80 backdrop-blur-xl transition-colors">
     <div class="flex items-center gap-4">
-      <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center font-display font-extrabold text-noir text-sm tracking-tighter">
+      <div class="w-9 h-9 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-noir flex items-center justify-center font-display font-extrabold text-sm tracking-tighter">
         S//
       </div>
       <div>
-        <span class="font-display font-bold tracking-widest text-sm text-white uppercase block leading-none">SHIPS AGENCY</span>
-        <span class="font-mono text-[10px] text-zinc-400 tracking-wider">ENGINEERING RECRUITMENT • 2025</span>
+        <span class="font-display font-bold tracking-widest text-sm text-zinc-900 dark:text-white uppercase block leading-none">SHIPS AGENCY</span>
+        <span class="font-mono text-[10px] text-zinc-500 dark:text-zinc-400 tracking-wider">ENGINEERING RECRUITMENT • 2025</span>
       </div>
     </div>
 
     <!-- Ticker Status -->
-    <div class="hidden md:flex items-center gap-6 font-mono text-xs text-zinc-400">
+    <div class="hidden md:flex items-center gap-6 font-mono text-xs text-zinc-600 dark:text-zinc-400">
       <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-acid animate-pulse"></span>
+        <span class="w-2 h-2 rounded-full bg-emerald-500 dark:bg-acid animate-pulse"></span>
         <span>EXPERIENCE ENGINE: ONLINE</span>
       </div>
-      <span class="text-zinc-600">/</span>
-      <div>STAGE: <span id="nav-stage-indicator" class="text-white font-bold">01_IDENTITY</span></div>
+      <span class="text-zinc-300 dark:text-zinc-600">/</span>
+      <div>STAGE: <span id="nav-stage-indicator" class="text-zinc-900 dark:text-white font-bold">01_IDENTITY</span></div>
     </div>
 
-    <!-- Right HUD: Mock Button & Progress -->
-    <div class="flex items-center gap-3 font-mono text-xs">
+    <!-- Right HUD: Theme Switcher, Mock Button & Progress -->
+    <div class="flex items-center gap-2 sm:gap-3 font-mono text-xs">
+      <!-- Theme Switcher Toggle -->
+      <button type="button" id="btn-theme-toggle" 
+        class="magnetic-action px-2.5 sm:px-3 py-1.5 border border-zinc-300 dark:border-white/20 bg-zinc-100 hover:bg-zinc-200 dark:bg-white/5 dark:hover:bg-white/10 text-zinc-800 dark:text-zinc-200 text-[11px] font-mono font-bold tracking-wider rounded transition-all flex items-center gap-1.5"
+        data-cursor-label="THEME"
+        title="Toggle Light / Dark Theme">
+        <span id="theme-toggle-icon">☀</span>
+        <span id="theme-toggle-label" class="hidden sm:inline">LIGHT</span>
+      </button>
+
       <!-- Auto Fill Sample Button -->
       <button type="button" id="btn-mock-fill" 
-        class="magnetic-action px-3 py-1.5 border border-acid/50 bg-acid/10 hover:bg-acid text-acid hover:text-noir text-[11px] font-mono font-bold tracking-wider rounded transition-all flex items-center gap-1.5"
+        class="magnetic-action px-2.5 sm:px-3 py-1.5 border border-zinc-300 dark:border-acid/50 bg-zinc-100 hover:bg-zinc-900 hover:text-white text-zinc-900 dark:bg-acid/10 dark:hover:bg-acid text-acid dark:hover:text-noir text-[11px] font-mono font-bold tracking-wider rounded transition-all flex items-center gap-1.5"
         data-cursor-label="INJECT">
         <span>⚡ AUTO-FILL MOCK</span>
       </button>
 
       <div class="flex items-center gap-1">
-        <span class="text-zinc-500">[</span>
-        <span id="numeric-progress" class="text-acid font-bold">25%</span>
-        <span class="text-zinc-500">]</span>
+        <span class="text-zinc-400 dark:text-zinc-500">[</span>
+        <span id="numeric-progress" class="text-indigo-600 dark:text-acid font-bold">25%</span>
+        <span class="text-zinc-400 dark:text-zinc-500">]</span>
       </div>
     </div>
   </header>
 
   <!-- Running Kinetic Marquee Bar -->
-  <div class="w-full border-b border-white/5 bg-zinc-950/40 py-1.5 marquee-wrapper select-none">
-    <div class="marquee-content font-mono text-[11px] tracking-widest text-zinc-500 uppercase flex gap-8 pr-8">
+  <div class="w-full border-b border-zinc-200 dark:border-white/5 bg-zinc-100 dark:bg-zinc-950/40 py-1.5 marquee-wrapper select-none transition-colors">
+    <div class="marquee-content font-mono text-[11px] tracking-widest text-zinc-500 dark:text-zinc-500 uppercase flex gap-8 pr-8">
       <span>• SHIPS TALENT CORPS</span>
       <span>• AUTONOMOUS AGENT ORCHESTRATION</span>
       <span>• 60FPS GRAPHICS ENGINEERING</span>
       <span>• HIGH DISTRIBUTED RESILIENCE</span>
       <span>• FAULT ISOLATION BY ARISA</span>
       <span>• CRENCY INSPIRED ARCHITECTURE</span>
+      <span>• DUAL THEME EDITORIAL ENGINE</span>
     </div>
-    <div class="marquee-content font-mono text-[11px] tracking-widest text-zinc-500 uppercase flex gap-8 pr-8" aria-hidden="true">
+    <div class="marquee-content font-mono text-[11px] tracking-widest text-zinc-500 dark:text-zinc-500 uppercase flex gap-8 pr-8" aria-hidden="true">
       <span>• SHIPS TALENT CORPS</span>
       <span>• AUTONOMOUS AGENT ORCHESTRATION</span>
       <span>• 60FPS GRAPHICS ENGINEERING</span>
       <span>• HIGH DISTRIBUTED RESILIENCE</span>
       <span>• FAULT ISOLATION BY ARISA</span>
       <span>• CRENCY INSPIRED ARCHITECTURE</span>
+      <span>• DUAL THEME EDITORIAL ENGINE</span>
     </div>
   </div>
 
@@ -276,28 +385,28 @@
   <main class="w-full max-w-5xl mx-auto px-6 py-8 md:py-12 flex-1 flex flex-col justify-center relative z-20">
     
     <!-- Top Step Pill Bar -->
-    <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/10 font-mono text-xs">
-      <div class="flex items-center gap-6 md:gap-10">
-        <button type="button" class="step-nav-btn text-white flex items-center gap-2 transition-all cursor-pointer" data-step="0">
-          <span class="w-5 h-5 rounded-full border border-acid bg-acid text-noir font-bold text-[10px] flex items-center justify-center">1</span>
+    <div class="flex items-center justify-between mb-8 pb-4 border-b border-zinc-200 dark:border-white/10 font-mono text-xs transition-colors">
+      <div class="flex items-center gap-4 sm:gap-8 md:gap-10">
+        <button type="button" class="step-nav-btn flex items-center gap-2 transition-all cursor-pointer" data-step="0">
+          <span class="w-5 h-5 rounded-full border border-zinc-900 bg-zinc-900 text-white dark:border-acid dark:bg-acid dark:text-noir font-bold text-[10px] flex items-center justify-center">1</span>
           <span class="tracking-wider">IDENTITY</span>
         </button>
-        <button type="button" class="step-nav-btn text-zinc-500 flex items-center gap-2 transition-all cursor-pointer" data-step="1">
-          <span class="w-5 h-5 rounded-full border border-zinc-700 text-zinc-400 font-bold text-[10px] flex items-center justify-center">2</span>
+        <button type="button" class="step-nav-btn text-zinc-400 dark:text-zinc-500 flex items-center gap-2 transition-all cursor-pointer" data-step="1">
+          <span class="w-5 h-5 rounded-full border border-zinc-300 dark:border-zinc-700 text-zinc-400 font-bold text-[10px] flex items-center justify-center">2</span>
           <span class="tracking-wider">STACK</span>
         </button>
-        <button type="button" class="step-nav-btn text-zinc-500 flex items-center gap-2 transition-all cursor-pointer" data-step="2">
-          <span class="w-5 h-5 rounded-full border border-zinc-700 text-zinc-400 font-bold text-[10px] flex items-center justify-center">3</span>
+        <button type="button" class="step-nav-btn text-zinc-400 dark:text-zinc-500 flex items-center gap-2 transition-all cursor-pointer" data-step="2">
+          <span class="w-5 h-5 rounded-full border border-zinc-300 dark:border-zinc-700 text-zinc-400 font-bold text-[10px] flex items-center justify-center">3</span>
           <span class="tracking-wider">MINDSET</span>
         </button>
-        <button type="button" class="step-nav-btn text-zinc-500 flex items-center gap-2 transition-all cursor-pointer" data-step="3">
-          <span class="w-5 h-5 rounded-full border border-zinc-700 text-zinc-400 font-bold text-[10px] flex items-center justify-center">4</span>
+        <button type="button" class="step-nav-btn text-zinc-400 dark:text-zinc-500 flex items-center gap-2 transition-all cursor-pointer" data-step="3">
+          <span class="w-5 h-5 rounded-full border border-zinc-300 dark:border-zinc-700 text-zinc-400 font-bold text-[10px] flex items-center justify-center">4</span>
           <span class="tracking-wider">SUMMARY</span>
         </button>
       </div>
 
-      <div class="hidden sm:block text-zinc-400 text-[11px]">
-        INERTIA TIMELINE: <span class="text-white font-bold">POWER4.OUT</span>
+      <div class="hidden sm:block text-zinc-500 dark:text-zinc-400 text-[11px]">
+        INERTIA TIMELINE: <span class="text-zinc-900 dark:text-white font-bold">POWER4.OUT</span>
       </div>
     </div>
 
@@ -311,15 +420,15 @@
             
             <div class="space-y-1">
               <div class="mask-overflow">
-                <span class="mask-line font-mono text-xs text-acid tracking-widest uppercase font-semibold">01 / CANDIDATE IDENTITY</span>
+                <span class="mask-line font-mono text-xs text-indigo-600 dark:text-acid tracking-widest uppercase font-semibold">01 / CANDIDATE IDENTITY</span>
               </div>
               <div class="mask-overflow">
-                <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-white uppercase">
+                <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-zinc-900 dark:text-white uppercase">
                   Define Your Core
                 </h2>
               </div>
               <div class="mask-overflow">
-                <p class="mask-line text-sm text-zinc-400 font-light max-w-xl">
+                <p class="mask-line text-sm text-zinc-600 dark:text-zinc-400 font-light max-w-xl">
                   Initiate candidate authentication. Provide your verified credentials and select your engineering discipline.
                 </p>
               </div>
@@ -328,65 +437,65 @@
             <!-- Inputs -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
               <div class="space-y-1.5">
-                <label class="block font-mono text-[11px] text-zinc-400 tracking-wider uppercase">Full Legal Name *</label>
+                <label class="block font-mono text-[11px] text-zinc-600 dark:text-zinc-400 tracking-wider uppercase">Full Legal Name *</label>
                 <input type="text" id="field-name" placeholder="Grace Hopper"
-                  class="w-full bg-surface border border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-white focus:outline-none focus:border-acid transition-colors placeholder:text-zinc-600 hoverable-input">
-                <p class="text-[11px] font-mono text-rose-400 hidden" id="err-name">Identity token invalid (min 2 characters)</p>
+                  class="w-full bg-white dark:bg-surface border border-zinc-300 dark:border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-zinc-900 dark:text-white focus:outline-none focus:border-zinc-900 dark:focus:border-acid transition-colors placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
+                <p class="text-[11px] font-mono text-rose-500 hidden" id="err-name">Identity token invalid (min 2 characters)</p>
               </div>
               <div class="space-y-1.5">
-                <label class="block font-mono text-[11px] text-zinc-400 tracking-wider uppercase">Corporate / Verified Email *</label>
+                <label class="block font-mono text-[11px] text-zinc-600 dark:text-zinc-400 tracking-wider uppercase">Corporate / Verified Email *</label>
                 <input type="email" id="field-email" placeholder="grace@navy.mil"
-                  class="w-full bg-surface border border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-white focus:outline-none focus:border-acid transition-colors placeholder:text-zinc-600 hoverable-input">
-                <p class="text-[11px] font-mono text-rose-400 hidden" id="err-email">RFC-compliant email required</p>
+                  class="w-full bg-white dark:bg-surface border border-zinc-300 dark:border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-zinc-900 dark:text-white focus:outline-none focus:border-zinc-900 dark:focus:border-acid transition-colors placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
+                <p class="text-[11px] font-mono text-rose-500 hidden" id="err-email">RFC-compliant email required</p>
               </div>
             </div>
 
             <div class="space-y-1.5">
-              <label class="block font-mono text-[11px] text-zinc-400 tracking-wider uppercase">GitHub Profile URL *</label>
+              <label class="block font-mono text-[11px] text-zinc-600 dark:text-zinc-400 tracking-wider uppercase">GitHub Profile URL *</label>
               <input type="url" id="field-github" placeholder="https://github.com/gracehopper"
-                class="w-full bg-surface border border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-white focus:outline-none focus:border-acid transition-colors placeholder:text-zinc-600 hoverable-input">
-              <p class="text-[11px] font-mono text-rose-400 hidden" id="err-github">Must follow: https://github.com/handle</p>
+                class="w-full bg-white dark:bg-surface border border-zinc-300 dark:border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-zinc-900 dark:text-white focus:outline-none focus:border-zinc-900 dark:focus:border-acid transition-colors placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
+              <p class="text-[11px] font-mono text-rose-500 hidden" id="err-github">Must follow: https://github.com/handle</p>
             </div>
 
             <!-- Role Cards (3D Tilt & Magnetic Click) -->
             <div class="space-y-2 pt-2">
-              <label class="block font-mono text-[11px] text-zinc-400 tracking-wider uppercase">Target Specialization *</label>
+              <label class="block font-mono text-[11px] text-zinc-600 dark:text-zinc-400 tracking-wider uppercase">Target Specialization *</label>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="role-cards-container">
                 
-                <div class="tilt-card p-4 border border-white/10 bg-surface-card rounded-lg flex items-center justify-between cursor-pointer hover:border-white/30 transition-all" data-role="AI Systems Specialist" data-cursor-label="SELECT">
+                <div class="tilt-card p-4 border rounded-lg flex items-center justify-between cursor-pointer transition-all" data-role="AI Systems Specialist" data-cursor-label="SELECT">
                   <div class="space-y-1">
-                    <span class="font-display font-bold text-white text-base tracking-tight block">AI Systems Specialist</span>
-                    <span class="font-mono text-[11px] text-zinc-400 block">LLM Evals, RAG Pipelines & Token Routing</span>
+                    <span class="font-display font-bold text-zinc-900 dark:text-white text-base tracking-tight block">AI Systems Specialist</span>
+                    <span class="font-mono text-[11px] text-zinc-500 dark:text-zinc-400 block">LLM Evals, RAG Pipelines & Token Routing</span>
                   </div>
-                  <span class="role-badge font-mono text-[10px] px-2 py-1 bg-white/5 rounded text-zinc-300 font-bold">AI_01</span>
+                  <span class="role-badge font-mono text-[10px] px-2 py-1 rounded font-bold">AI_01</span>
                 </div>
 
-                <div class="tilt-card p-4 border border-white/10 bg-surface-card rounded-lg flex items-center justify-between cursor-pointer hover:border-white/30 transition-all" data-role="Cloud Infrastructure Engineer" data-cursor-label="SELECT">
+                <div class="tilt-card p-4 border rounded-lg flex items-center justify-between cursor-pointer transition-all" data-role="Cloud Infrastructure Engineer" data-cursor-label="SELECT">
                   <div class="space-y-1">
-                    <span class="font-display font-bold text-white text-base tracking-tight block">Cloud & Distributed Core</span>
-                    <span class="font-mono text-[11px] text-zinc-400 block">K8s, Multi-Region Routing & Terraform</span>
+                    <span class="font-display font-bold text-zinc-900 dark:text-white text-base tracking-tight block">Cloud & Distributed Core</span>
+                    <span class="font-mono text-[11px] text-zinc-500 dark:text-zinc-400 block">K8s, Multi-Region Routing & Terraform</span>
                   </div>
-                  <span class="role-badge font-mono text-[10px] px-2 py-1 bg-white/5 rounded text-zinc-300 font-bold">OPS_02</span>
+                  <span class="role-badge font-mono text-[10px] px-2 py-1 rounded font-bold">OPS_02</span>
                 </div>
 
-                <div class="tilt-card p-4 border border-white/10 bg-surface-card rounded-lg flex items-center justify-between cursor-pointer hover:border-white/30 transition-all" data-role="Fullstack Motion Engineer" data-cursor-label="SELECT">
+                <div class="tilt-card p-4 border rounded-lg flex items-center justify-between cursor-pointer transition-all" data-role="Fullstack Motion Engineer" data-cursor-label="SELECT">
                   <div class="space-y-1">
-                    <span class="font-display font-bold text-white text-base tracking-tight block">Fullstack Motion Engineer</span>
-                    <span class="font-mono text-[11px] text-zinc-400 block">FastAPI, TypeScript, WebGL & Canvas</span>
+                    <span class="font-display font-bold text-zinc-900 dark:text-white text-base tracking-tight block">Fullstack Motion Engineer</span>
+                    <span class="font-mono text-[11px] text-zinc-500 dark:text-zinc-400 block">FastAPI, TypeScript, WebGL & Canvas</span>
                   </div>
-                  <span class="role-badge font-mono text-[10px] px-2 py-1 bg-white/5 rounded text-zinc-300 font-bold">FSD_03</span>
+                  <span class="role-badge font-mono text-[10px] px-2 py-1 rounded font-bold">FSD_03</span>
                 </div>
 
-                <div class="tilt-card p-4 border border-white/10 bg-surface-card rounded-lg flex items-center justify-between cursor-pointer hover:border-white/30 transition-all" data-role="QA Automation Lead" data-cursor-label="SELECT">
+                <div class="tilt-card p-4 border rounded-lg flex items-center justify-between cursor-pointer transition-all" data-role="QA Automation Lead" data-cursor-label="SELECT">
                   <div class="space-y-1">
-                    <span class="font-display font-bold text-white text-base tracking-tight block">QA Automation Lead</span>
-                    <span class="font-mono text-[11px] text-zinc-400 block">Playwright, E2E Latency & Chaos Testing</span>
+                    <span class="font-display font-bold text-zinc-900 dark:text-white text-base tracking-tight block">QA Automation Lead</span>
+                    <span class="font-mono text-[11px] text-zinc-500 dark:text-zinc-400 block">Playwright, E2E Latency & Chaos Testing</span>
                   </div>
-                  <span class="role-badge font-mono text-[10px] px-2 py-1 bg-white/5 rounded text-zinc-300 font-bold">QAL_04</span>
+                  <span class="role-badge font-mono text-[10px] px-2 py-1 rounded font-bold">QAL_04</span>
                 </div>
 
               </div>
-              <p class="text-[11px] font-mono text-rose-400 hidden" id="err-role">Please select one engineering specialization</p>
+              <p class="text-[11px] font-mono text-rose-500 hidden" id="err-role">Please select one engineering specialization</p>
             </div>
 
           </div>
@@ -398,35 +507,35 @@
             
             <div class="space-y-1">
               <div class="mask-overflow">
-                <span class="mask-line font-mono text-xs text-acid tracking-widest uppercase font-semibold">02 / TECHNICAL ARSENAL</span>
+                <span class="mask-line font-mono text-xs text-indigo-600 dark:text-acid tracking-widest uppercase font-semibold">02 / TECHNICAL ARSENAL</span>
               </div>
               <div class="mask-overflow">
-                <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-white uppercase">
+                <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-zinc-900 dark:text-white uppercase">
                   Stack & Seniority
                 </h2>
               </div>
               <div class="mask-overflow">
-                <p class="mask-line text-sm text-zinc-400 font-light max-w-xl">
+                <p class="mask-line text-sm text-zinc-600 dark:text-zinc-400 font-light max-w-xl">
                   Calibrate your software development tenure and activate your core production toolchains.
                 </p>
               </div>
             </div>
 
-            <!-- Years Experience Slider -->
-            <div class="p-6 border border-white/10 bg-surface-card rounded-lg space-y-4">
+            <!-- Years Experience Slider with kinetic value -->
+            <div class="p-6 border border-zinc-200 dark:border-white/10 bg-white dark:bg-surface-card rounded-lg space-y-4 shadow-sm transition-colors">
               <div class="flex justify-between items-end font-mono">
                 <div>
-                  <span class="text-[11px] text-zinc-400 uppercase tracking-widest block">Seniority Calibration</span>
-                  <span class="text-xs text-zinc-500">Years writing production systems</span>
+                  <span class="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block">Seniority Calibration</span>
+                  <span class="text-xs text-zinc-400 dark:text-zinc-500">Years writing production systems</span>
                 </div>
                 <div class="text-right">
-                  <span id="val-exp" class="text-2xl font-display font-bold text-acid">04</span>
-                  <span class="text-xs text-zinc-400 font-mono"> YEARS</span>
+                  <span id="val-exp" class="text-2xl font-display font-bold text-zinc-900 dark:text-acid">04</span>
+                  <span class="text-xs text-zinc-500 dark:text-zinc-400 font-mono"> YEARS</span>
                 </div>
               </div>
               <input type="range" id="range-exp" min="0" max="15" value="4" step="1" 
-                class="w-full h-1 bg-zinc-800 rounded-none appearance-none hoverable-slider" data-cursor-label="DRAG">
-              <div class="flex justify-between font-mono text-[10px] text-zinc-500 uppercase">
+                class="w-full h-1 bg-zinc-200 dark:bg-zinc-800 rounded-none appearance-none" data-cursor-label="DRAG">
+              <div class="flex justify-between font-mono text-[10px] text-zinc-400 dark:text-zinc-500 uppercase">
                 <span>Novice (0y)</span>
                 <span>Mid (3-5y)</span>
                 <span>Senior (7-10y)</span>
@@ -434,39 +543,39 @@
               </div>
             </div>
 
-            <!-- Skill Badges -->
+            <!-- Skill Badges with Pill toggling -->
             <div class="space-y-3">
               <div class="flex justify-between items-center font-mono">
-                <label class="text-[11px] text-zinc-400 tracking-wider uppercase">Select Core Toolchains (Min 2) *</label>
-                <span id="skill-counter-badge" class="text-[11px] text-zinc-500">0 SELECTED</span>
+                <label class="text-[11px] text-zinc-600 dark:text-zinc-400 tracking-wider uppercase">Select Core Toolchains (Min 2) *</label>
+                <span id="skill-counter-badge" class="text-[11px] text-zinc-400 dark:text-zinc-500">0 SELECTED</span>
               </div>
               <div class="flex flex-wrap gap-2.5" id="pills-container">
-                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="TypeScript" data-cursor-label="TOGGLE">TypeScript</button>
-                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="Python" data-cursor-label="TOGGLE">Python</button>
-                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="FastAPI" data-cursor-label="TOGGLE">FastAPI</button>
-                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="Docker" data-cursor-label="TOGGLE">Docker</button>
-                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="PyTorch" data-cursor-label="TOGGLE">PyTorch</button>
-                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="PostgreSQL" data-cursor-label="TOGGLE">PostgreSQL</button>
-                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="Playwright" data-cursor-label="TOGGLE">Playwright</button>
-                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="TailwindCSS" data-cursor-label="TOGGLE">TailwindCSS</button>
-                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="Kubernetes" data-cursor-label="TOGGLE">Kubernetes</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border text-xs font-mono" data-skill="TypeScript" data-cursor-label="TOGGLE">TypeScript</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border text-xs font-mono" data-skill="Python" data-cursor-label="TOGGLE">Python</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border text-xs font-mono" data-skill="FastAPI" data-cursor-label="TOGGLE">FastAPI</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border text-xs font-mono" data-skill="Docker" data-cursor-label="TOGGLE">Docker</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border text-xs font-mono" data-skill="PyTorch" data-cursor-label="TOGGLE">PyTorch</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border text-xs font-mono" data-skill="PostgreSQL" data-cursor-label="TOGGLE">PostgreSQL</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border text-xs font-mono" data-skill="Playwright" data-cursor-label="TOGGLE">Playwright</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border text-xs font-mono" data-skill="TailwindCSS" data-cursor-label="TOGGLE">TailwindCSS</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border text-xs font-mono" data-skill="Kubernetes" data-cursor-label="TOGGLE">Kubernetes</button>
               </div>
-              <p class="text-[11px] font-mono text-rose-400 hidden" id="err-skills">Please choose at least 2 technologies</p>
+              <p class="text-[11px] font-mono text-rose-500 hidden" id="err-skills">Please choose at least 2 technologies</p>
             </div>
 
             <!-- Target Compensation Slider -->
-            <div class="p-6 border border-white/10 bg-surface-card rounded-lg space-y-4">
+            <div class="p-6 border border-zinc-200 dark:border-white/10 bg-white dark:bg-surface-card rounded-lg space-y-4 shadow-sm transition-colors">
               <div class="flex justify-between items-end font-mono">
                 <div>
-                  <span class="text-[11px] text-zinc-400 uppercase tracking-widest block">Expected Compensation</span>
-                  <span class="text-xs text-zinc-500">Base salary target (USD)</span>
+                  <span class="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block">Expected Compensation</span>
+                  <span class="text-xs text-zinc-400 dark:text-zinc-500">Base salary target (USD)</span>
                 </div>
                 <div class="text-right">
-                  <span id="val-salary" class="text-2xl font-display font-bold text-white">$145,000</span>
+                  <span id="val-salary" class="text-2xl font-display font-bold text-zinc-900 dark:text-white">$145,000</span>
                 </div>
               </div>
               <input type="range" id="range-salary" min="80000" max="260000" value="145000" step="5000" 
-                class="w-full h-1 bg-zinc-800 rounded-none appearance-none hoverable-slider" data-cursor-label="DRAG">
+                class="w-full h-1 bg-zinc-200 dark:bg-zinc-800 rounded-none appearance-none" data-cursor-label="DRAG">
             </div>
 
           </div>
@@ -478,27 +587,27 @@
             
             <div class="space-y-1">
               <div class="mask-overflow">
-                <span class="mask-line font-mono text-xs text-acid tracking-widest uppercase font-semibold">03 / ARCHITECTURAL PHILOSOPHY</span>
+                <span class="mask-line font-mono text-xs text-indigo-600 dark:text-acid tracking-widest uppercase font-semibold">03 / ARCHITECTURAL PHILOSOPHY</span>
               </div>
               <div class="mask-overflow">
-                <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-white uppercase">
+                <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-zinc-900 dark:text-white uppercase">
                   Distributed Mindset
                 </h2>
               </div>
               <div class="mask-overflow">
-                <p class="mask-line text-sm text-zinc-400 font-light max-w-xl">
+                <p class="mask-line text-sm text-zinc-600 dark:text-zinc-400 font-light max-w-xl">
                   We look for engineers who design with failure domains in mind. How do you construct antifragile infrastructure?
                 </p>
               </div>
             </div>
 
             <!-- Code Scenario Card -->
-            <div class="p-5 border border-white/10 bg-zinc-950 font-mono text-xs text-zinc-300 leading-relaxed border-l-2 border-l-acid space-y-2">
+            <div class="p-5 border border-zinc-200 dark:border-white/10 bg-zinc-100 dark:bg-zinc-950 font-mono text-xs text-zinc-800 dark:text-zinc-300 leading-relaxed border-l-4 border-l-zinc-900 dark:border-l-acid space-y-2 transition-colors">
               <div class="text-zinc-500 flex items-center justify-between">
                 <span>// SCENARIO SPECIFICATION: PROTOCOL_RESILIENCE</span>
-                <span class="text-[10px] text-acid">REQUIRED_MIN_CHARS: 60</span>
+                <span class="text-[10px] text-indigo-600 dark:text-acid font-bold">REQUIRED_MIN_CHARS: 60</span>
               </div>
-              <p class="text-zinc-300">
+              <p class="text-zinc-700 dark:text-zinc-300">
                 "Describe how you handle backpressure and guarantee zero state corruption during a 10x traffic surge on a transactional datastore."
               </p>
             </div>
@@ -508,14 +617,14 @@
               <div class="relative">
                 <textarea id="field-mindset" rows="7" 
                   placeholder="e.g. Introduce an asynchronous write-behind cache with Redis Cluster, enforce distributed token-bucket rate limiting at ingress Envoy proxy, use Kafka partitions for guaranteed sequence ordered writes, and place resilience4j circuit breakers with automatic fallback..."
-                  class="w-full bg-surface border border-white/10 p-4 text-xs font-mono text-white focus:outline-none focus:border-acid transition-colors leading-relaxed placeholder:text-zinc-600 hoverable-input"
+                  class="w-full bg-white dark:bg-surface border border-zinc-300 dark:border-white/10 p-4 text-xs font-mono text-zinc-900 dark:text-white focus:outline-none focus:border-zinc-900 dark:focus:border-acid transition-colors leading-relaxed placeholder:text-zinc-400 dark:placeholder:text-zinc-600"
                   data-cursor-label="TYPE"></textarea>
               </div>
               <div class="flex justify-between items-center font-mono text-[11px]">
                 <span class="text-zinc-500">FORMAT: MARKDOWN / PLAIN TEXT</span>
-                <span id="char-meter" class="text-zinc-400">0 / 800 CHARACTERS</span>
+                <span id="char-meter" class="text-zinc-500 dark:text-zinc-400">0 / 800 CHARACTERS</span>
               </div>
-              <p class="text-[11px] font-mono text-rose-400 hidden" id="err-mindset">Insight too brief. Please provide deeper technical context (min 60 chars).</p>
+              <p class="text-[11px] font-mono text-rose-500 hidden" id="err-mindset">Insight too brief. Please provide deeper technical context (min 60 chars).</p>
             </div>
 
           </div>
@@ -527,58 +636,58 @@
             
             <div class="space-y-1">
               <div class="mask-overflow">
-                <span class="mask-line font-mono text-xs text-acid tracking-widest uppercase font-semibold">04 / APPLICATION EMISSION</span>
+                <span class="mask-line font-mono text-xs text-indigo-600 dark:text-acid tracking-widest uppercase font-semibold">04 / APPLICATION EMISSION</span>
               </div>
               <div class="mask-overflow">
-                <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-white uppercase">
+                <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-zinc-900 dark:text-white uppercase">
                   Verify & Dispatch
                 </h2>
               </div>
               <div class="mask-overflow">
-                <p class="mask-line text-sm text-zinc-400 font-light max-w-xl">
+                <p class="mask-line text-sm text-zinc-600 dark:text-zinc-400 font-light max-w-xl">
                   Audit your submission parameters before dispatching telemetry to the SHIPS engineering workforce.
                 </p>
               </div>
             </div>
 
             <!-- Monospace Dossier Card -->
-            <div class="border border-white/10 bg-surface-card p-6 rounded-lg space-y-4 font-mono text-xs">
-              <div class="flex justify-between items-center border-b border-white/5 pb-3">
+            <div class="border border-zinc-200 dark:border-white/10 bg-white dark:bg-surface-card p-6 rounded-lg space-y-4 font-mono text-xs shadow-sm transition-colors">
+              <div class="flex justify-between items-center border-b border-zinc-100 dark:border-white/5 pb-3">
                 <span class="text-zinc-500 uppercase tracking-widest">CANDIDATE</span>
-                <span id="sum-name" class="text-white font-bold text-sm">-</span>
+                <span id="sum-name" class="text-zinc-900 dark:text-white font-bold text-sm">-</span>
               </div>
-              <div class="flex justify-between items-center border-b border-white/5 pb-3">
+              <div class="flex justify-between items-center border-b border-zinc-100 dark:border-white/5 pb-3">
                 <span class="text-zinc-500 uppercase tracking-widest">CONTACT</span>
-                <span id="sum-email" class="text-zinc-300">-</span>
+                <span id="sum-email" class="text-zinc-700 dark:text-zinc-300">-</span>
               </div>
-              <div class="flex justify-between items-center border-b border-white/5 pb-3">
+              <div class="flex justify-between items-center border-b border-zinc-100 dark:border-white/5 pb-3">
                 <span class="text-zinc-500 uppercase tracking-widest">TARGET ROLE</span>
-                <span id="sum-role" class="text-acid font-bold">-</span>
+                <span id="sum-role" class="text-indigo-600 dark:text-acid font-bold">-</span>
               </div>
-              <div class="flex justify-between items-center border-b border-white/5 pb-3">
+              <div class="flex justify-between items-center border-b border-zinc-100 dark:border-white/5 pb-3">
                 <span class="text-zinc-500 uppercase tracking-widest">EXP & SALARY</span>
-                <span id="sum-exp-sal" class="text-white font-semibold">-</span>
+                <span id="sum-exp-sal" class="text-zinc-900 dark:text-white font-semibold">-</span>
               </div>
-              <div class="border-b border-white/5 pb-3 space-y-2">
+              <div class="border-b border-zinc-100 dark:border-white/5 pb-3 space-y-2">
                 <span class="text-zinc-500 uppercase tracking-widest block">ACTIVATED TOOLCHAINS</span>
                 <div id="sum-skills" class="flex flex-wrap gap-1.5">
-                  <span class="text-zinc-600 italic">None</span>
+                  <span class="text-zinc-400 italic">None</span>
                 </div>
               </div>
               <div class="space-y-1.5">
                 <span class="text-zinc-500 uppercase tracking-widest block">SYSTEM ARCHITECTURE PERSPECTIVE</span>
-                <p id="sum-mindset" class="text-zinc-300 text-[11px] line-clamp-3 bg-noir p-3 border border-white/5 leading-relaxed italic">-</p>
+                <p id="sum-mindset" class="text-zinc-800 dark:text-zinc-300 text-[11px] line-clamp-3 bg-zinc-50 dark:bg-noir p-3 border border-zinc-200 dark:border-white/5 leading-relaxed italic">-</p>
               </div>
             </div>
 
             <!-- Confirmation Check -->
             <div class="flex items-start gap-3 pt-2">
-              <input type="checkbox" id="field-agree" class="mt-1 w-4 h-4 bg-surface border-white/20 text-acid rounded-none focus:ring-0 cursor-pointer">
-              <label for="field-agree" class="text-xs font-mono text-zinc-400 select-none cursor-pointer">
+              <input type="checkbox" id="field-agree" class="mt-1 w-4 h-4 bg-white dark:bg-surface border-zinc-300 dark:border-white/20 text-zinc-900 dark:text-acid rounded-none focus:ring-0 cursor-pointer">
+              <label for="field-agree" class="text-xs font-mono text-zinc-600 dark:text-zinc-400 select-none cursor-pointer">
                 I hereby sign this application payload and certify authentic authorship of all codebases & architectural patterns referenced.
               </label>
             </div>
-            <p class="text-[11px] font-mono text-rose-400 hidden" id="err-agree">Signature authorization required to emit application</p>
+            <p class="text-[11px] font-mono text-rose-500 hidden" id="err-agree">Signature authorization required to emit application</p>
 
           </div>
         </div>
@@ -587,23 +696,23 @@
     </div>
 
     <!-- Navigation Action Bar -->
-    <div class="mt-12 pt-6 border-t border-white/10 flex items-center justify-between">
+    <div class="mt-12 pt-6 border-t border-zinc-200 dark:border-white/10 flex items-center justify-between transition-colors">
       <button type="button" id="btn-back" 
-        class="magnetic-action font-mono text-xs text-zinc-400 hover:text-white px-5 py-3 border border-white/10 bg-surface opacity-0 pointer-events-none transition-colors"
+        class="magnetic-action font-mono text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white px-5 py-3 border border-zinc-300 dark:border-white/10 bg-white dark:bg-surface opacity-0 pointer-events-none transition-colors"
         data-cursor-label="BACK">
-        [ &larr; PREVIOUS ]
+        [ ← PREVIOUS ]
       </button>
 
       <div class="flex items-center gap-4">
         <button type="button" id="btn-next" 
-          class="magnetic-action font-mono text-xs font-bold text-noir bg-chalk hover:bg-acid px-8 py-3.5 transition-colors flex items-center gap-2"
+          class="magnetic-action font-mono text-xs font-bold text-white dark:text-noir bg-zinc-900 dark:bg-chalk hover:bg-zinc-800 dark:hover:bg-acid px-8 py-3.5 transition-colors flex items-center gap-2"
           data-cursor-label="NEXT">
           <span>CONTINUE</span>
           <span>&rarr;</span>
         </button>
 
         <button type="button" id="btn-dispatch" 
-          class="magnetic-action hidden font-mono text-xs font-bold text-noir bg-acid hover:bg-lime-400 px-8 py-3.5 transition-all flex items-center gap-3"
+          class="magnetic-action hidden font-mono text-xs font-bold text-white dark:text-noir bg-emerald-600 hover:bg-emerald-500 dark:bg-acid dark:hover:bg-lime-400 px-8 py-3.5 transition-all flex items-center gap-3"
           data-cursor-label="SEND">
           <span id="dispatch-spinner" class="hidden animate-spin">&#9696;</span>
           <span id="dispatch-label">TRANSMIT DOSSIER</span>
@@ -614,27 +723,27 @@
   </main>
 
   <!-- Success Modal Terminal -->
-  <div id="modal-complete" class="fixed inset-0 bg-noir/90 backdrop-blur-2xl hidden items-center justify-center z-50 p-6">
-    <div class="border border-white/20 bg-surface-card p-8 md:p-12 max-w-lg w-full space-y-6 text-left relative">
-      <div class="w-12 h-12 rounded-full bg-acid/10 border border-acid text-acid flex items-center justify-center font-mono font-bold text-lg">
+  <div id="modal-complete" class="fixed inset-0 bg-zinc-900/60 dark:bg-noir/90 backdrop-blur-2xl hidden items-center justify-center z-50 p-6 transition-colors">
+    <div class="border border-zinc-200 dark:border-white/20 bg-white dark:bg-surface-card p-8 md:p-12 max-w-lg w-full space-y-6 text-left relative shadow-2xl">
+      <div class="w-12 h-12 rounded-full bg-emerald-500/10 dark:bg-acid/10 border border-emerald-500 dark:border-acid text-emerald-600 dark:text-acid flex items-center justify-center font-mono font-bold text-lg">
         &#10003;
       </div>
       <div class="space-y-1">
-        <span class="font-mono text-xs text-acid tracking-widest uppercase">PIPELINE ACKNOWLEDGED</span>
-        <h3 class="text-3xl font-display font-extrabold text-white uppercase">Dossier Stage Cleared</h3>
-        <p class="text-xs font-mono text-zinc-400 leading-relaxed pt-2">
+        <span class="font-mono text-xs text-emerald-600 dark:text-acid tracking-widest uppercase">PIPELINE ACKNOWLEDGED</span>
+        <h3 class="text-3xl font-display font-extrabold text-zinc-900 dark:text-white uppercase">Dossier Stage Cleared</h3>
+        <p class="text-xs font-mono text-zinc-600 dark:text-zinc-400 leading-relaxed pt-2">
           Your telemetry has been routed into the SHIPS Autonomous Evaluation Queue supervised by ARISA. A confirmation token has been logged to the engineering cluster.
         </p>
       </div>
 
-      <div class="bg-noir p-4 border border-white/10 font-mono text-[11px] text-zinc-400 space-y-1">
-        <div>ORCHESTRATOR: <span class="text-acid font-bold">ARISA_CHIEF_OF_STAFF</span></div>
-        <div>PAYLOAD_HASH: <span class="text-white">0x9f4a82b...c31</span></div>
-        <div>STATUS: <span class="text-emerald-400 font-bold">STAGED_FOR_CODE_AUDIT</span></div>
+      <div class="bg-zinc-100 dark:bg-noir p-4 border border-zinc-200 dark:border-white/10 font-mono text-[11px] text-zinc-700 dark:text-zinc-400 space-y-1">
+        <div>ORCHESTRATOR: <span class="text-emerald-600 dark:text-acid font-bold">ARISA_CHIEF_OF_STAFF</span></div>
+        <div>PAYLOAD_HASH: <span class="text-zinc-900 dark:text-white font-mono">0x9f4a82b...c31</span></div>
+        <div>STATUS: <span class="text-emerald-600 dark:text-emerald-400 font-bold">STAGED_FOR_CODE_AUDIT</span></div>
       </div>
 
       <button type="button" onclick="location.reload()" 
-        class="w-full py-3.5 bg-chalk hover:bg-acid text-noir font-mono text-xs font-bold transition-colors uppercase tracking-wider"
+        class="w-full py-3.5 bg-zinc-900 hover:bg-zinc-800 dark:bg-chalk dark:hover:bg-acid text-white dark:text-noir font-mono text-xs font-bold transition-colors uppercase tracking-wider"
         data-cursor-label="RELOAD">
         Restart Intake Engine
       </button>
@@ -642,8 +751,8 @@
   </div>
 
   <!-- Footer -->
-  <footer class="w-full border-t border-white/5 py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between font-mono text-[11px] text-zinc-600 relative z-20">
-    <div>SHIPS SOFTWARE HOUSE &copy; 2025 • ALL RIGHTS RESERVED</div>
+  <footer class="w-full border-t border-zinc-200 dark:border-white/5 py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between font-mono text-[11px] text-zinc-500 dark:text-zinc-600 relative z-20 transition-colors">
+    <div>SHIPS SOFTWARE HOUSE © 2025 • ALL RIGHTS RESERVED</div>
     <div class="flex gap-4 mt-2 md:mt-0">
       <span>CREATIVE DIRECTION: CRENCY AGENCY INSPIRED</span>
       <span>•</span>
@@ -671,11 +780,15 @@
     };
 
     // DOM References
+    const htmlEl = document.documentElement;
     const slider = document.getElementById('steps-slider');
     const btnBack = document.getElementById('btn-back');
     const btnNext = document.getElementById('btn-next');
     const btnDispatch = document.getElementById('btn-dispatch');
     const btnMockFill = document.getElementById('btn-mock-fill');
+    const btnThemeToggle = document.getElementById('btn-theme-toggle');
+    const themeToggleIcon = document.getElementById('theme-toggle-icon');
+    const themeToggleLabel = document.getElementById('theme-toggle-label');
     const numericProgress = document.getElementById('numeric-progress');
     const navStageIndicator = document.getElementById('nav-stage-indicator');
     const stepNavBtns = document.querySelectorAll('.step-nav-btn');
@@ -684,6 +797,37 @@
     const cursorDot = document.getElementById('cursor-dot');
     const cursorLabel = document.getElementById('cursor-label');
     const ambientLight = document.getElementById('ambient-light');
+
+    // Theme Engine
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        htmlEl.classList.remove('light');
+        htmlEl.classList.add('dark');
+        themeToggleIcon.textContent = '☾';
+        if (themeToggleLabel) themeToggleLabel.textContent = 'DARK';
+      } else {
+        htmlEl.classList.remove('dark');
+        htmlEl.classList.add('light');
+        themeToggleIcon.textContent = '☀';
+        if (themeToggleLabel) themeToggleLabel.textContent = 'LIGHT';
+      }
+      localStorage.setItem('ships_theme', theme);
+
+      if (cursorFollower && !cursorLabel.textContent) {
+        cursorFollower.style.borderColor = theme === 'dark' ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.45)';
+        cursorFollower.style.backgroundColor = 'transparent';
+      }
+      updateNavigationHUD();
+    }
+
+    // Default theme initialized to LIGHT
+    const initialTheme = localStorage.getItem('ships_theme') || 'light';
+    applyTheme(initialTheme);
+
+    btnThemeToggle.addEventListener('click', () => {
+      const current = htmlEl.classList.contains('dark') ? 'dark' : 'light';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
 
     // 1. Fluid Inertia Cursor with Lerp
     let mouseX = window.innerWidth / 2;
@@ -712,6 +856,7 @@
     }
     requestAnimationFrame(renderCursorLoop);
 
+    // Dynamic Cursor State Transformations
     function attachCursorInteractions() {
       const interactives = document.querySelectorAll('[data-cursor-label], input, button, .tilt-card, .pill-skill');
       
@@ -723,17 +868,21 @@
           
           cursorFollower.style.width = '70px';
           cursorFollower.style.height = '70px';
-          cursorFollower.style.backgroundColor = '#a3e635';
-          cursorFollower.style.borderColor = '#a3e635';
+          const isLight = htmlEl.classList.contains('light');
+          cursorFollower.style.backgroundColor = isLight ? '#09090b' : '#a3e635';
+          cursorFollower.style.borderColor = isLight ? '#09090b' : '#a3e635';
+          cursorLabel.style.color = isLight ? '#ffffff' : '#08080a';
           cursorDot.style.opacity = '0';
         });
 
         el.addEventListener('mouseleave', () => {
+          cursorLabel.textContent = '';
           cursorLabel.style.opacity = '0';
           cursorFollower.style.width = '38px';
           cursorFollower.style.height = '38px';
           cursorFollower.style.backgroundColor = 'transparent';
-          cursorFollower.style.borderColor = 'rgba(255,255,255,0.45)';
+          const isLight = htmlEl.classList.contains('light');
+          cursorFollower.style.borderColor = isLight ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.45)';
           cursorDot.style.opacity = '1';
         });
       });
@@ -815,6 +964,7 @@
       }
     }
 
+    // Update HUD & Step Indicators
     function updateNavigationHUD() {
       const stages = ['01_IDENTITY', '02_STACK', '03_MINDSET', '04_SUMMARY'];
       navStageIndicator.textContent = stages[state.step];
@@ -836,27 +986,24 @@
         btnDispatch.classList.add('hidden');
       }
 
+      const isLight = htmlEl.classList.contains('light');
+
       stepNavBtns.forEach((btn, idx) => {
         const circle = btn.querySelector('span:first-child');
         if (idx === state.step) {
-          btn.classList.remove('text-zinc-500');
-          btn.classList.add('text-white');
-          circle.classList.add('bg-acid', 'text-noir', 'border-acid');
-          circle.classList.remove('border-zinc-700', 'text-zinc-400');
+          btn.className = `step-nav-btn flex items-center gap-2 transition-all cursor-pointer ${isLight ? 'text-zinc-900 font-bold' : 'text-white'}`;
+          circle.className = `w-5 h-5 rounded-full border text-[10px] font-bold flex items-center justify-center ${isLight ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-acid text-noir border-acid'}`;
         } else if (idx < state.step) {
-          btn.classList.remove('text-zinc-500');
-          btn.classList.add('text-zinc-300');
-          circle.classList.remove('bg-acid', 'text-noir');
-          circle.classList.add('border-zinc-500', 'text-zinc-200');
+          btn.className = `step-nav-btn flex items-center gap-2 transition-all cursor-pointer ${isLight ? 'text-zinc-600' : 'text-zinc-300'}`;
+          circle.className = `w-5 h-5 rounded-full border text-[10px] font-bold flex items-center justify-center ${isLight ? 'border-zinc-400 text-zinc-700 bg-zinc-100' : 'border-zinc-500 text-zinc-200'}`;
         } else {
-          btn.classList.add('text-zinc-500');
-          btn.classList.remove('text-white', 'text-zinc-300');
-          circle.classList.remove('bg-acid', 'text-noir', 'border-zinc-500');
-          circle.classList.add('border-zinc-700', 'text-zinc-400');
+          btn.className = `step-nav-btn flex items-center gap-2 transition-all cursor-pointer ${isLight ? 'text-zinc-400' : 'text-zinc-500'}`;
+          circle.className = `w-5 h-5 rounded-full border text-[10px] font-bold flex items-center justify-center ${isLight ? 'border-zinc-300 text-zinc-400' : 'border-zinc-700 text-zinc-400'}`;
         }
       });
     }
 
+    // Validation Guard
     function validateStep(stepIndex) {
       let valid = true;
 
@@ -933,6 +1080,7 @@
       return valid;
     }
 
+    // Populate Review Dossier
     function populateDossier() {
       document.getElementById('sum-name').textContent = state.data.name || 'UNKNOWN';
       document.getElementById('sum-email').textContent = state.data.email || 'N/A';
@@ -943,11 +1091,14 @@
       const skillContainer = document.getElementById('sum-skills');
       skillContainer.innerHTML = '';
       if (state.data.skills.length === 0) {
-        skillContainer.innerHTML = '<span class="text-zinc-600 italic">None selected</span>';
+        skillContainer.innerHTML = '<span class="text-zinc-400 italic">None selected</span>';
       } else {
+        const isLight = htmlEl.classList.contains('light');
         state.data.skills.forEach(s => {
           const pill = document.createElement('span');
-          pill.className = 'px-2 py-0.5 border border-white/10 bg-white/5 text-zinc-300 text-[10px] font-mono';
+          pill.className = isLight 
+            ? 'px-2 py-0.5 border border-zinc-200 bg-zinc-100 text-zinc-800 text-[10px] font-mono'
+            : 'px-2 py-0.5 border border-white/10 bg-white/5 text-zinc-300 text-[10px] font-mono';
           pill.textContent = s;
           skillContainer.appendChild(pill);
         });
@@ -970,7 +1121,6 @@
         agreed: true
       };
 
-      // 1. Step 1 Fields
       document.getElementById('field-name').value = mock.name;
       document.getElementById('field-email').value = mock.email;
       document.getElementById('field-github').value = mock.github;
@@ -978,7 +1128,6 @@
       state.data.email = mock.email;
       state.data.github = mock.github;
 
-      // Role Selection
       const roleCards = document.querySelectorAll('.tilt-card');
       roleCards.forEach(card => {
         if (card.getAttribute('data-role') === mock.role) {
@@ -989,7 +1138,6 @@
         }
       });
 
-      // 2. Step 2 Fields
       const rangeExp = document.getElementById('range-exp');
       const valExp = document.getElementById('val-exp');
       rangeExp.value = mock.experience;
@@ -1002,7 +1150,6 @@
       valSalary.textContent = `$${Number(mock.salary).toLocaleString()}`;
       state.data.salary = mock.salary;
 
-      // Skill Pills
       state.data.skills = [...mock.skills];
       const pills = document.querySelectorAll('.pill-skill');
       pills.forEach(pill => {
@@ -1015,30 +1162,31 @@
       });
       document.getElementById('skill-counter-badge').textContent = `${mock.skills.length} SELECTED`;
 
-      // 3. Step 3 Fields
       const fieldMindset = document.getElementById('field-mindset');
       fieldMindset.value = mock.mindset;
       state.data.mindset = mock.mindset;
       const charMeter = document.getElementById('char-meter');
       charMeter.textContent = `${mock.mindset.length} / 800 CHARACTERS`;
-      charMeter.classList.add('text-acid');
-      charMeter.classList.remove('text-zinc-400');
+      charMeter.classList.add('text-indigo-600', 'dark:text-acid');
 
-      // 4. Step 4 Agreement
       document.getElementById('field-agree').checked = mock.agreed;
       state.data.agreed = mock.agreed;
 
-      // Clear all error notices
       document.querySelectorAll('[id^="err-"]').forEach(err => err.classList.add('hidden'));
 
-      // Update Dossier
       populateDossier();
 
-      // Kinetic Feedback on the Button
       const originalHTML = btnMockFill.innerHTML;
       btnMockFill.innerHTML = '<span>✓ TELEMETRY INJECTED</span>';
-      btnMockFill.classList.add('bg-acid', 'text-noir');
-      btnMockFill.classList.remove('text-acid', 'bg-acid/10');
+      
+      const isLight = htmlEl.classList.contains('light');
+      if (isLight) {
+        btnMockFill.classList.add('bg-zinc-900', 'text-white');
+        btnMockFill.classList.remove('text-zinc-900', 'bg-zinc-100');
+      } else {
+        btnMockFill.classList.add('bg-acid', 'text-noir');
+        btnMockFill.classList.remove('text-acid', 'bg-acid/10');
+      }
 
       anime({
         targets: btnMockFill,
@@ -1049,8 +1197,13 @@
 
       setTimeout(() => {
         btnMockFill.innerHTML = originalHTML;
-        btnMockFill.classList.remove('bg-acid', 'text-noir');
-        btnMockFill.classList.add('text-acid', 'bg-acid/10');
+        if (isLight) {
+          btnMockFill.classList.remove('bg-zinc-900', 'text-white');
+          btnMockFill.classList.add('text-zinc-900', 'bg-zinc-100');
+        } else {
+          btnMockFill.classList.remove('bg-acid', 'text-noir');
+          btnMockFill.classList.add('text-acid', 'bg-acid/10');
+        }
       }, 1600);
     }
 
@@ -1063,7 +1216,10 @@
 
       const particles = [];
       const count = 180;
-      const palette = ['#a3e635', '#ffffff', '#6366f1', '#18181b'];
+      const isLight = htmlEl.classList.contains('light');
+      const palette = isLight 
+        ? ['#09090b', '#4f46e5', '#16a34a', '#e11d48', '#f59e0b', '#3b82f6']
+        : ['#a3e635', '#ffffff', '#6366f1', '#18181b', '#38bdf8'];
 
       for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
@@ -1110,10 +1266,8 @@
 
     // Event Bindings
     function initListeners() {
-      // Mock Fill Button
       btnMockFill.addEventListener('click', autoFillMockData);
 
-      // Role Selection Cards
       const roleCards = document.querySelectorAll('.tilt-card');
       roleCards.forEach(card => {
         card.addEventListener('click', () => {
@@ -1131,7 +1285,6 @@
         });
       });
 
-      // Experience Slider
       const rangeExp = document.getElementById('range-exp');
       const valExp = document.getElementById('val-exp');
       rangeExp.addEventListener('input', (e) => {
@@ -1140,7 +1293,6 @@
         state.data.experience = parseInt(e.target.value, 10);
       });
 
-      // Salary Slider
       const rangeSalary = document.getElementById('range-salary');
       const valSalary = document.getElementById('val-salary');
       rangeSalary.addEventListener('input', (e) => {
@@ -1148,7 +1300,6 @@
         state.data.salary = parseInt(e.target.value, 10);
       });
 
-      // Skill Pills Toggle
       const pills = document.querySelectorAll('.pill-skill');
       const skillCounter = document.getElementById('skill-counter-badge');
       pills.forEach(pill => {
@@ -1174,23 +1325,21 @@
         });
       });
 
-      // Mindset Textarea
       const fieldMindset = document.getElementById('field-mindset');
       const charMeter = document.getElementById('char-meter');
       fieldMindset.addEventListener('input', (e) => {
         const len = e.target.value.length;
         charMeter.textContent = `${len} / 800 CHARACTERS`;
         if (len >= 60) {
-          charMeter.classList.add('text-acid');
-          charMeter.classList.remove('text-zinc-400');
+          charMeter.classList.add('text-indigo-600', 'dark:text-acid');
+          charMeter.classList.remove('text-zinc-500', 'dark:text-zinc-400');
           document.getElementById('err-mindset').classList.add('hidden');
         } else {
-          charMeter.classList.remove('text-acid');
-          charMeter.classList.add('text-zinc-400');
+          charMeter.classList.remove('text-indigo-600', 'dark:text-acid');
+          charMeter.classList.add('text-zinc-500', 'dark:text-zinc-400');
         }
       });
 
-      // Top Step Nav Tabs
       stepNavBtns.forEach(btn => {
         btn.addEventListener('click', () => {
           const target = parseInt(btn.getAttribute('data-step'), 10);
@@ -1202,7 +1351,6 @@
         });
       });
 
-      // Next & Back
       btnNext.addEventListener('click', () => {
         if (validateStep(state.step)) {
           navigateToStep(state.step + 1);
@@ -1212,7 +1360,6 @@
         navigateToStep(state.step - 1);
       });
 
-      // Final Submission Dispatch
       btnDispatch.addEventListener('click', () => {
         if (!validateStep(3)) return;
 
