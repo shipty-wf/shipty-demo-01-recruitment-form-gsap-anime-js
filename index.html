@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SHIPS Software House — Engineering Recruitment Portal</title>
+  <title>SHIPS — Engineering Recruitment Portal</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,687 +13,994 @@
       theme: {
         extend: {
           colors: {
-            brand: {
-              50: '#eef2ff',
-              400: '#818cf8',
-              500: '#6366f1',
-              600: '#4f46e5',
-              900: '#0b0f19',
-              card: '#111827',
-              border: '#1f2937'
-            }
+            noir: '#08080a',
+            surface: '#111115',
+            'surface-card': '#15151b',
+            accent: '#6366f1',
+            acid: '#a3e635',
+            chalk: '#f4f4f5'
           },
           fontFamily: {
-            mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-            sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif']
+            display: ['Syne', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
           }
         }
       }
     }
   </script>
 
-  <!-- Google Fonts -->
+  <!-- Typography: Syne (Crency-style Editorial Display) + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Animation Libraries -->
+  <!-- Animation Engines -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
 
   <style>
-    body {
+    /* Custom Cursor Reset */
+    * {
+      cursor: none !important;
+    }
+    html, body {
+      background-color: #08080a;
+      overflow-x: hidden;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0b0f19 75%);
     }
-    .font-code {
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .glass-panel {
-      background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .role-card-selected {
-      border-color: #6366f1 !important;
-      background: rgba(99, 102, 241, 0.15) !important;
-      box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
-    }
-    .badge-selected {
-      background-color: #6366f1 !important;
-      color: #ffffff !important;
-      border-color: #818cf8 !important;
-      transform: scale(1.05);
-    }
-    input[type="range"]::-webkit-slider-thumb {
-      appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #6366f1;
-      cursor: pointer;
-      box-shadow: 0 0 10px #6366f1;
-      border: 2px solid #ffffff;
-    }
-    #confetti-canvas {
-      pointer-events: none;
+
+    /* Film Grain Noise Texture */
+    .noise-layer {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 9999;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Ambient Cursor Spotlight */
+    #ambient-light {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0) 70%);
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      will-change: transform;
+    }
+
+    /* Custom Crency Cursor */
+    #cursor-follower {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                  height 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                  border-color 0.3s ease,
+                  background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: transform;
+    }
+    #cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      background: #ffffff;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10001;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+    #cursor-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      color: #08080a;
+      letter-spacing: 0.05em;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+    }
+
+    /* Marquee Track */
+    .marquee-wrapper {
+      overflow: hidden;
+      white-space: nowrap;
+      display: flex;
+    }
+    .marquee-content {
+      display: flex;
+      flex-shrink: 0;
+      animation: marqueeScroll 26s linear infinite;
+    }
+    @keyframes marqueeScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    /* Kinetic Mask Reveal Utility */
+    .mask-overflow {
+      overflow: hidden;
+    }
+    .mask-line {
+      display: inline-block;
+      transform: translateY(115%);
+      will-change: transform;
+    }
+
+    /* 3D Tilt Card Container */
+    .tilt-card {
+      transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.15s ease-out;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .tilt-card-active {
+      border-color: #a3e635 !important;
+      box-shadow: 0 0 35px rgba(163, 230, 53, 0.18);
+      background: rgba(21, 21, 27, 0.9) !important;
+    }
+    .tilt-card-active .role-badge {
+      background: #a3e635 !important;
+      color: #08080a !important;
+    }
+
+    /* Skill Pill */
+    .pill-skill {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .pill-skill.selected {
+      background-color: #f4f4f5 !important;
+      color: #08080a !important;
+      border-color: #f4f4f5 !important;
+      font-weight: 700;
+    }
+
+    /* Styled Sliders */
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #a3e635;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(163, 230, 53, 0.6);
+      border: 2px solid #08080a;
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 99999;
     }
   </style>
 </head>
-<body class="min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden antialiased">
+<body class="min-h-screen text-chalk flex flex-col justify-between relative selection:bg-acid selection:text-noir">
+
+  <!-- Grain Shader Layer -->
+  <div class="noise-layer"></div>
+  
+  <!-- Interactive Cursor Light Spot -->
+  <div id="ambient-light"></div>
+
+  <!-- Custom Cursor -->
+  <div id="cursor-follower">
+    <span id="cursor-label"></span>
+  </div>
+  <div id="cursor-dot"></div>
+
+  <!-- Confetti Canvas -->
   <canvas id="confetti-canvas"></canvas>
 
-  <!-- Top Navigation & Header -->
-  <header class="w-full border-b border-white/5 py-4 px-6 md:px-12 flex items-center justify-between glass-panel sticky top-0 z-40">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/30">
-        S
+  <!-- Top Navigation -->
+  <header class="w-full border-b border-white/10 px-6 md:px-12 py-5 flex items-center justify-between relative z-30 bg-noir/80 backdrop-blur-xl">
+    <div class="flex items-center gap-4">
+      <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center font-display font-extrabold text-noir text-sm tracking-tighter">
+        S//
       </div>
       <div>
-        <h1 class="text-sm font-semibold tracking-wide text-white uppercase">SHIPS Software House</h1>
-        <p class="text-xs text-indigo-400 font-mono">Talent Acquisition Engineering</p>
+        <span class="font-display font-bold tracking-widest text-sm text-white uppercase block leading-none">SHIPS AGENCY</span>
+        <span class="font-mono text-[10px] text-zinc-400 tracking-wider">ENGINEERING RECRUITMENT • 2025</span>
       </div>
     </div>
-    
-    <div class="flex items-center gap-4">
-      <span class="text-xs font-mono text-slate-400 hidden sm:inline-block">PIPELINE: <span class="text-emerald-400">GSAP+ANIME_v3</span></span>
-      <div class="px-3 py-1 rounded-full text-xs font-mono bg-indigo-950/80 border border-indigo-700/50 text-indigo-300">
-        Step <span id="current-step-display" class="font-bold text-white">1</span> of 4
+
+    <!-- Ticker Status -->
+    <div class="hidden md:flex items-center gap-6 font-mono text-xs text-zinc-400">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-acid animate-pulse"></span>
+        <span>EXPERIENCE ENGINE: ONLINE</span>
       </div>
+      <span class="text-zinc-600">/</span>
+      <div>STAGE: <span id="nav-stage-indicator" class="text-white font-bold">01_IDENTITY</span></div>
+    </div>
+
+    <!-- Minimal Progress Dial -->
+    <div class="flex items-center gap-3 font-mono text-xs">
+      <span class="text-zinc-500">[</span>
+      <span id="numeric-progress" class="text-acid font-bold">25%</span>
+      <span class="text-zinc-500">]</span>
     </div>
   </header>
 
-  <!-- Progress Bar Container -->
-  <div class="w-full max-w-4xl mx-auto px-6 pt-6">
-    <div class="flex items-center justify-between mb-2">
-      <span class="text-xs font-mono uppercase tracking-widest text-slate-400">Workflow Completion</span>
-      <span id="progress-percentage" class="text-xs font-mono font-bold text-indigo-400">25%</span>
+  <!-- Running Kinetic Marquee Bar -->
+  <div class="w-full border-b border-white/5 bg-zinc-950/40 py-1.5 marquee-wrapper select-none">
+    <div class="marquee-content font-mono text-[11px] tracking-widest text-zinc-500 uppercase flex gap-8 pr-8">
+      <span>• SHIPS TALENT CORPS</span>
+      <span>• AUTONOMOUS AGENT ORCHESTRATION</span>
+      <span>• 60FPS GRAPHICS ENGINEERING</span>
+      <span>• HIGH DISTRIBUTED RESILIENCE</span>
+      <span>• FAULT ISOLATION BY ARISA</span>
+      <span>• CRENCY INSPIRED ARCHITECTURE</span>
     </div>
-    <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden relative">
-      <div id="progress-fill" class="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 w-1/4 rounded-full transition-all duration-300 ease-out"></div>
-    </div>
-
-    <!-- Interactive Step Indicators with SVG Path Draw -->
-    <div class="grid grid-cols-4 gap-2 mt-4 text-center">
-      <div class="step-indicator group flex flex-col items-center cursor-pointer" data-step-target="0">
-        <svg class="w-7 h-7 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <circle class="step-circle stroke-indigo-400" cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="64" stroke-dashoffset="0"/>
-          <text x="12" y="16" text-anchor="middle" font-size="11" fill="#fff" font-family="monospace">1</text>
-        </svg>
-        <span class="text-[11px] font-mono text-indigo-300 font-semibold">Identity</span>
-      </div>
-      <div class="step-indicator group flex flex-col items-center opacity-40 cursor-pointer" data-step-target="1">
-        <svg class="w-7 h-7 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <circle class="step-circle stroke-slate-500" cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="64" stroke-dashoffset="64"/>
-          <text x="12" y="16" text-anchor="middle" font-size="11" fill="#aaa" font-family="monospace">2</text>
-        </svg>
-        <span class="text-[11px] font-mono text-slate-400">Technical</span>
-      </div>
-      <div class="step-indicator group flex flex-col items-center opacity-40 cursor-pointer" data-step-target="2">
-        <svg class="w-7 h-7 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <circle class="step-circle stroke-slate-500" cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="64" stroke-dashoffset="64"/>
-          <text x="12" y="16" text-anchor="middle" font-size="11" fill="#aaa" font-family="monospace">3</text>
-        </svg>
-        <span class="text-[11px] font-mono text-slate-400">Mindset</span>
-      </div>
-      <div class="step-indicator group flex flex-col items-center opacity-40 cursor-pointer" data-step-target="3">
-        <svg class="w-7 h-7 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <circle class="step-circle stroke-slate-500" cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="64" stroke-dashoffset="64"/>
-          <text x="12" y="16" text-anchor="middle" font-size="11" fill="#aaa" font-family="monospace">4</text>
-        </svg>
-        <span class="text-[11px] font-mono text-slate-400">Review</span>
-      </div>
+    <div class="marquee-content font-mono text-[11px] tracking-widest text-zinc-500 uppercase flex gap-8 pr-8" aria-hidden="true">
+      <span>• SHIPS TALENT CORPS</span>
+      <span>• AUTONOMOUS AGENT ORCHESTRATION</span>
+      <span>• 60FPS GRAPHICS ENGINEERING</span>
+      <span>• HIGH DISTRIBUTED RESILIENCE</span>
+      <span>• FAULT ISOLATION BY ARISA</span>
+      <span>• CRENCY INSPIRED ARCHITECTURE</span>
     </div>
   </div>
 
-  <!-- Form Carousel Viewport -->
-  <main class="w-full max-w-4xl mx-auto px-4 sm:px-6 my-6 flex-1 flex flex-col justify-center">
-    <div class="glass-panel rounded-2xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
-      
-      <!-- Slider Track holding all 4 steps horizontally -->
-      <div id="form-slider-track" class="flex w-[400%] transition-none">
-        
-        <!-- ================= STEP 1: IDENTITY & ROLE ================= -->
-        <section class="w-1/4 flex-shrink-0 px-2 sm:px-4 form-step" id="step-0">
-          <div class="step-content-anim">
-            <span class="text-xs font-mono text-indigo-400 tracking-wider uppercase font-semibold">Step 01 / Basic Setup</span>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">Candidate Profile & Desired Focus</h2>
-            <p class="text-sm text-slate-400 mt-2 mb-6">Let's initialize your profile within the SHIPS engineering ecosystem.</p>
+  <!-- Main Multi-step Interactive Viewport -->
+  <main class="w-full max-w-5xl mx-auto px-6 py-8 md:py-12 flex-1 flex flex-col justify-center relative z-20">
+    
+    <!-- Top Step Pill Bar -->
+    <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/10 font-mono text-xs">
+      <div class="flex items-center gap-6 md:gap-10">
+        <button type="button" class="step-nav-btn text-white flex items-center gap-2 transition-all cursor-pointer" data-step="0">
+          <span class="w-5 h-5 rounded-full border border-acid bg-acid text-noir font-bold text-[10px] flex items-center justify-center">1</span>
+          <span class="tracking-wider">IDENTITY</span>
+        </button>
+        <button type="button" class="step-nav-btn text-zinc-500 flex items-center gap-2 transition-all cursor-pointer" data-step="1">
+          <span class="w-5 h-5 rounded-full border border-zinc-700 text-zinc-400 font-bold text-[10px] flex items-center justify-center">2</span>
+          <span class="tracking-wider">STACK</span>
+        </button>
+        <button type="button" class="step-nav-btn text-zinc-500 flex items-center gap-2 transition-all cursor-pointer" data-step="2">
+          <span class="w-5 h-5 rounded-full border border-zinc-700 text-zinc-400 font-bold text-[10px] flex items-center justify-center">3</span>
+          <span class="tracking-wider">MINDSET</span>
+        </button>
+        <button type="button" class="step-nav-btn text-zinc-500 flex items-center gap-2 transition-all cursor-pointer" data-step="3">
+          <span class="w-5 h-5 rounded-full border border-zinc-700 text-zinc-400 font-bold text-[10px] flex items-center justify-center">4</span>
+          <span class="tracking-wider">SUMMARY</span>
+        </button>
+      </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-mono text-slate-300 mb-1.5">FULL LEGAL NAME *</label>
-                <input type="text" id="input-fullname" placeholder="Grace Hopper"
-                  class="w-full bg-slate-900/90 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono">
-                <span class="text-xs text-rose-400 hidden mt-1" id="err-fullname">Minimum 2 characters required</span>
+      <div class="hidden sm:block text-zinc-400 text-[11px]">
+        INERTIA TIMELINE: <span class="text-white font-bold">POWER4.OUT</span>
+      </div>
+    </div>
+
+    <!-- Carousel Container -->
+    <div class="relative overflow-hidden w-full">
+      <div id="steps-slider" class="flex w-[400%]">
+
+        <!-- =================== STEP 1: IDENTITY =================== -->
+        <div class="w-1/4 flex-shrink-0 px-2 sm:px-4" id="view-step-0">
+          <div class="space-y-6">
+            
+            <div class="space-y-1">
+              <div class="mask-overflow">
+                <span class="mask-line font-mono text-xs text-acid tracking-widest uppercase font-semibold">01 / CANDIDATE IDENTITY</span>
               </div>
-              <div>
-                <label class="block text-xs font-mono text-slate-300 mb-1.5">WORK / PRIMARY EMAIL *</label>
-                <input type="email" id="input-email" placeholder="grace@naval.navy.mil"
-                  class="w-full bg-slate-900/90 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono">
-                <span class="text-xs text-rose-400 hidden mt-1" id="err-email">Valid corporate or personal email required</span>
+              <div class="mask-overflow">
+                <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-white uppercase">
+                  Define Your Core
+                </h2>
+              </div>
+              <div class="mask-overflow">
+                <p class="mask-line text-sm text-zinc-400 font-light max-w-xl">
+                  Initiate candidate authentication. Provide your verified credentials and select your engineering discipline.
+                </p>
               </div>
             </div>
 
-            <div class="mt-4">
-              <label class="block text-xs font-mono text-slate-300 mb-1.5">GITHUB PROFILE URL *</label>
-              <input type="url" id="input-github" placeholder="https://github.com/gracehopper"
-                class="w-full bg-slate-900/90 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono">
-              <span class="text-xs text-rose-400 hidden mt-1" id="err-github">Format must be: https://github.com/your-handle</span>
+            <!-- Inputs -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+              <div class="space-y-1.5">
+                <label class="block font-mono text-[11px] text-zinc-400 tracking-wider uppercase">Full Legal Name *</label>
+                <input type="text" id="field-name" placeholder="Grace Hopper"
+                  class="w-full bg-surface border border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-white focus:outline-none focus:border-acid transition-colors placeholder:text-zinc-600 hoverable-input">
+                <p class="text-[11px] font-mono text-rose-400 hidden" id="err-name">Identity token invalid (min 2 characters)</p>
+              </div>
+              <div class="space-y-1.5">
+                <label class="block font-mono text-[11px] text-zinc-400 tracking-wider uppercase">Corporate / Verified Email *</label>
+                <input type="email" id="field-email" placeholder="grace@navy.mil"
+                  class="w-full bg-surface border border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-white focus:outline-none focus:border-acid transition-colors placeholder:text-zinc-600 hoverable-input">
+                <p class="text-[11px] font-mono text-rose-400 hidden" id="err-email">RFC-compliant email required</p>
+              </div>
             </div>
 
-            <div class="mt-6">
-              <label class="block text-xs font-mono text-slate-300 mb-2">TARGET SPECIALIZATION *</label>
+            <div class="space-y-1.5">
+              <label class="block font-mono text-[11px] text-zinc-400 tracking-wider uppercase">GitHub Profile URL *</label>
+              <input type="url" id="field-github" placeholder="https://github.com/gracehopper"
+                class="w-full bg-surface border border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-white focus:outline-none focus:border-acid transition-colors placeholder:text-zinc-600 hoverable-input">
+              <p class="text-[11px] font-mono text-rose-400 hidden" id="err-github">Must follow: https://github.com/handle</p>
+            </div>
+
+            <!-- Role Cards (3D Tilt & Magnetic Click) -->
+            <div class="space-y-2 pt-2">
+              <label class="block font-mono text-[11px] text-zinc-400 tracking-wider uppercase">Target Specialization *</label>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="role-cards-container">
-                <div class="role-card cursor-pointer border border-slate-800 bg-slate-900/50 hover:bg-slate-800/80 rounded-xl p-3.5 transition-all flex items-center gap-3" data-role="AI Engineer">
-                  <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-mono font-bold text-sm">AI</div>
-                  <div>
-                    <div class="text-sm font-semibold text-white">AI Engineer</div>
-                    <div class="text-xs text-slate-400">LLMs, RAG, Evals, Model Routing</div>
+                
+                <div class="tilt-card p-4 border border-white/10 bg-surface-card rounded-lg flex items-center justify-between cursor-pointer hover:border-white/30 transition-all" data-role="AI Systems Specialist" data-cursor-label="SELECT">
+                  <div class="space-y-1">
+                    <span class="font-display font-bold text-white text-base tracking-tight block">AI Systems Specialist</span>
+                    <span class="font-mono text-[11px] text-zinc-400 block">LLM Evals, RAG Pipelines & Token Routing</span>
                   </div>
+                  <span class="role-badge font-mono text-[10px] px-2 py-1 bg-white/5 rounded text-zinc-300 font-bold">AI_01</span>
                 </div>
-                <div class="role-card cursor-pointer border border-slate-800 bg-slate-900/50 hover:bg-slate-800/80 rounded-xl p-3.5 transition-all flex items-center gap-3" data-role="Cloud/DevOps Engineer">
-                  <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-mono font-bold text-sm">CD</div>
-                  <div>
-                    <div class="text-sm font-semibold text-white">Cloud / DevOps</div>
-                    <div class="text-xs text-slate-400">K8s, Terraform, Docker, CI/CD</div>
+
+                <div class="tilt-card p-4 border border-white/10 bg-surface-card rounded-lg flex items-center justify-between cursor-pointer hover:border-white/30 transition-all" data-role="Cloud Infrastructure Engineer" data-cursor-label="SELECT">
+                  <div class="space-y-1">
+                    <span class="font-display font-bold text-white text-base tracking-tight block">Cloud & Distributed Core</span>
+                    <span class="font-mono text-[11px] text-zinc-400 block">K8s, Multi-Region Routing & Terraform</span>
                   </div>
+                  <span class="role-badge font-mono text-[10px] px-2 py-1 bg-white/5 rounded text-zinc-300 font-bold">OPS_02</span>
                 </div>
-                <div class="role-card cursor-pointer border border-slate-800 bg-slate-900/50 hover:bg-slate-800/80 rounded-xl p-3.5 transition-all flex items-center gap-3" data-role="Fullstack Engineer">
-                  <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-mono font-bold text-sm">FS</div>
-                  <div>
-                    <div class="text-sm font-semibold text-white">Fullstack Engineer</div>
-                    <div class="text-xs text-slate-400">FastAPI, TypeScript, Tailwind, React</div>
+
+                <div class="tilt-card p-4 border border-white/10 bg-surface-card rounded-lg flex items-center justify-between cursor-pointer hover:border-white/30 transition-all" data-role="Fullstack Motion Engineer" data-cursor-label="SELECT">
+                  <div class="space-y-1">
+                    <span class="font-display font-bold text-white text-base tracking-tight block">Fullstack Motion Engineer</span>
+                    <span class="font-mono text-[11px] text-zinc-400 block">FastAPI, TypeScript, WebGL & Canvas</span>
                   </div>
+                  <span class="role-badge font-mono text-[10px] px-2 py-1 bg-white/5 rounded text-zinc-300 font-bold">FSD_03</span>
                 </div>
-                <div class="role-card cursor-pointer border border-slate-800 bg-slate-900/50 hover:bg-slate-800/80 rounded-xl p-3.5 transition-all flex items-center gap-3" data-role="QA Automation Lead">
-                  <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono font-bold text-sm">QA</div>
-                  <div>
-                    <div class="text-sm font-semibold text-white">QA Lead</div>
-                    <div class="text-xs text-slate-400">Playwright, E2E, Regression Matrix</div>
+
+                <div class="tilt-card p-4 border border-white/10 bg-surface-card rounded-lg flex items-center justify-between cursor-pointer hover:border-white/30 transition-all" data-role="QA Automation Lead" data-cursor-label="SELECT">
+                  <div class="space-y-1">
+                    <span class="font-display font-bold text-white text-base tracking-tight block">QA Automation Lead</span>
+                    <span class="font-mono text-[11px] text-zinc-400 block">Playwright, E2E Latency & Chaos Testing</span>
                   </div>
+                  <span class="role-badge font-mono text-[10px] px-2 py-1 bg-white/5 rounded text-zinc-300 font-bold">QAL_04</span>
                 </div>
+
               </div>
-              <span class="text-xs text-rose-400 hidden mt-1" id="err-role">Please select one role focus</span>
+              <p class="text-[11px] font-mono text-rose-400 hidden" id="err-role">Please select one engineering specialization</p>
             </div>
+
           </div>
-        </section>
+        </div>
 
-        <!-- ================= STEP 2: TECHNICAL ARSENAL ================= -->
-        <section class="w-1/4 flex-shrink-0 px-2 sm:px-4 form-step" id="step-1">
-          <div class="step-content-anim">
-            <span class="text-xs font-mono text-indigo-400 tracking-wider uppercase font-semibold">Step 02 / Capabilities</span>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">Technical Arsenal & Experience</h2>
-            <p class="text-sm text-slate-400 mt-2 mb-6">Select your primary toolchains and tenure calibration.</p>
-
-            <!-- Experience Range Slider -->
-            <div class="mb-6 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-              <div class="flex justify-between items-center mb-2">
-                <label class="text-xs font-mono text-slate-300">YEARS OF PROFESSIONAL SOFTWARE ENGINEERING</label>
-                <span id="exp-display" class="font-mono font-bold text-indigo-400 text-base">4 Years</span>
+        <!-- =================== STEP 2: TECHNICAL STACK =================== -->
+        <div class="w-1/4 flex-shrink-0 px-2 sm:px-4" id="view-step-1">
+          <div class="space-y-6">
+            
+            <div class="space-y-1">
+              <div class="mask-overflow">
+                <span class="mask-line font-mono text-xs text-acid tracking-widest uppercase font-semibold">02 / TECHNICAL ARSENAL</span>
               </div>
-              <input type="range" id="input-exp" min="0" max="15" value="4" step="1" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
-              <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
-                <span>Entry (0)</span>
-                <span>Mid (3-5)</span>
-                <span>Senior (7-10)</span>
-                <span>Principal (15+)</span>
+              <div class="mask-overflow">
+                <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-white uppercase">
+                  Stack & Seniority
+                </h2>
+              </div>
+              <div class="mask-overflow">
+                <p class="mask-line text-sm text-zinc-400 font-light max-w-xl">
+                  Calibrate your software development tenure and activate your core production toolchains.
+                </p>
               </div>
             </div>
 
-            <!-- Floating Skill Badges with Anime.js bounce -->
-            <div class="mb-6">
-              <label class="block text-xs font-mono text-slate-300 mb-2">CORE SKILLS & TECHNOLOGIES (SELECT >= 2) *</label>
-              <div class="flex flex-wrap gap-2.5" id="skill-badges-container">
-                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="TypeScript">TypeScript</button>
-                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="Python">Python</button>
-                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="FastAPI">FastAPI</button>
-                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="Docker">Docker</button>
-                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="PyTorch">PyTorch</button>
-                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="TailwindCSS">TailwindCSS</button>
-                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="PostgreSQL">PostgreSQL</button>
-                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="Playwright">Playwright</button>
-              </div>
-              <span class="text-xs text-rose-400 hidden mt-1" id="err-skills">Please choose at least 2 skill badges</span>
-            </div>
-
-            <!-- Compensation Expectations -->
-            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-              <div class="flex justify-between items-center mb-2">
-                <label class="text-xs font-mono text-slate-300">ANNUAL SALARY EXPECTATION (USD)</label>
-                <span id="salary-display" class="font-mono font-bold text-emerald-400 text-base">$140,000</span>
-              </div>
-              <input type="range" id="input-salary" min="70000" max="250000" value="140000" step="5000" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
-            </div>
-          </div>
-        </section>
-
-        <!-- ================= STEP 3: ENGINEERING MINDSET ================= -->
-        <section class="w-1/4 flex-shrink-0 px-2 sm:px-4 form-step" id="step-2">
-          <div class="step-content-anim">
-            <span class="text-xs font-mono text-indigo-400 tracking-wider uppercase font-semibold">Step 03 / Architecture</span>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">Engineering Mindset & Resilience</h2>
-            <p class="text-sm text-slate-400 mt-2 mb-4">We evaluate how candidates balance fault isolation, concurrency, and telemetry.</p>
-
-            <div class="bg-slate-950/80 rounded-xl p-4 border border-slate-800 mb-4 font-mono text-xs text-indigo-300 leading-relaxed">
-              <span class="text-slate-500 select-none">// PROMPT SCENARIO:</span><br>
-              "Describe how you design a resilient distributed system handling unpredictable burst traffic while avoiding cascading database failures."
-            </div>
-
-            <div class="relative">
-              <textarea id="input-mindset" rows="7" placeholder="e.g. Implement token-bucket rate limiting at the API gateway layer, route traffic into asynchronous Kafka queues with dead-letter partitions, utilize circuit breakers (resilience4j pattern) around downstream PostgreSQL calls, and enforce idempotent writes..."
-                class="w-full bg-slate-900/90 border border-slate-700 rounded-xl p-4 text-xs font-mono text-slate-200 leading-relaxed focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"></textarea>
-              
-              <div class="flex justify-between items-center mt-2 font-mono text-xs">
-                <span class="text-slate-500">Min 60 characters required</span>
-                <span id="char-counter" class="text-slate-400">0 / 1000</span>
-              </div>
-              <span class="text-xs text-rose-400 hidden mt-1" id="err-mindset">Your technical reflection is too short (min 60 chars)</span>
-            </div>
-          </div>
-        </section>
-
-        <!-- ================= STEP 4: REVIEW & TRANSMIT ================= -->
-        <section class="w-1/4 flex-shrink-0 px-2 sm:px-4 form-step" id="step-3">
-          <div class="step-content-anim">
-            <span class="text-xs font-mono text-emerald-400 tracking-wider uppercase font-semibold">Step 04 / Dispatch</span>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">Application Review & Verification</h2>
-            <p class="text-sm text-slate-400 mt-2 mb-4">Verify your credentials prior to emitting application payload.</p>
-
-            <!-- Dynamic Review Card -->
-            <div class="bg-slate-900/90 border border-indigo-500/30 rounded-xl p-5 shadow-lg space-y-3 font-mono text-xs">
-              <div class="flex justify-between border-b border-slate-800 pb-2">
-                <span class="text-slate-400">CANDIDATE:</span>
-                <span id="review-name" class="text-white font-semibold">-</span>
-              </div>
-              <div class="flex justify-between border-b border-slate-800 pb-2">
-                <span class="text-slate-400">COMMUNICATION:</span>
-                <span id="review-email" class="text-indigo-300">-</span>
-              </div>
-              <div class="flex justify-between border-b border-slate-800 pb-2">
-                <span class="text-slate-400">TARGET ROLE:</span>
-                <span id="review-role" class="text-emerald-400 font-bold">-</span>
-              </div>
-              <div class="flex justify-between border-b border-slate-800 pb-2">
-                <span class="text-slate-400">EXPERIENCE & SALARY:</span>
-                <span id="review-exp-salary" class="text-white">-</span>
-              </div>
-              <div class="border-b border-slate-800 pb-2">
-                <span class="text-slate-400 block mb-1">TECH ARSENAL:</span>
-                <div id="review-skills" class="flex flex-wrap gap-1.5">
-                  <span class="text-slate-500 italic">None selected</span>
+            <!-- Years Experience Slider with kinetic value -->
+            <div class="p-6 border border-white/10 bg-surface-card rounded-lg space-y-4">
+              <div class="flex justify-between items-end font-mono">
+                <div>
+                  <span class="text-[11px] text-zinc-400 uppercase tracking-widest block">Seniority Calibration</span>
+                  <span class="text-xs text-zinc-500">Years writing production systems</span>
+                </div>
+                <div class="text-right">
+                  <span id="val-exp" class="text-2xl font-display font-bold text-acid">04</span>
+                  <span class="text-xs text-zinc-400 font-mono"> YEARS</span>
                 </div>
               </div>
-              <div>
-                <span class="text-slate-400 block mb-1">MINDSET PREVIEW:</span>
-                <p id="review-mindset" class="text-slate-300 text-[11px] line-clamp-2 italic bg-slate-950/60 p-2 rounded border border-slate-800/80">-</p>
+              <input type="range" id="range-exp" min="0" max="15" value="4" step="1" 
+                class="w-full h-1 bg-zinc-800 rounded-none appearance-none hoverable-slider" data-cursor-label="DRAG">
+              <div class="flex justify-between font-mono text-[10px] text-zinc-500 uppercase">
+                <span>Novice (0y)</span>
+                <span>Mid (3-5y)</span>
+                <span>Senior (7-10y)</span>
+                <span>Staff/Principal (15y+)</span>
               </div>
             </div>
 
-            <!-- Agreement Checkbox -->
-            <div class="mt-4 flex items-start gap-3">
-              <input type="checkbox" id="input-agreement" class="mt-1 w-4 h-4 rounded bg-slate-800 border-slate-700 text-indigo-600 focus:ring-indigo-500 cursor-pointer">
-              <label for="input-agreement" class="text-xs text-slate-400 select-none cursor-pointer">
-                I attest that all submitted telemetry is authentic and authorize SHIPS Software House to evaluate my codebase & profile.
+            <!-- Skill Badges with Crency-style Pill toggling -->
+            <div class="space-y-3">
+              <div class="flex justify-between items-center font-mono">
+                <label class="text-[11px] text-zinc-400 tracking-wider uppercase">Select Core Toolchains (Min 2) *</label>
+                <span id="skill-counter-badge" class="text-[11px] text-zinc-500">0 SELECTED</span>
+              </div>
+              <div class="flex flex-wrap gap-2.5" id="pills-container">
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="TypeScript" data-cursor-label="TOGGLE">TypeScript</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="Python" data-cursor-label="TOGGLE">Python</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="FastAPI" data-cursor-label="TOGGLE">FastAPI</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="Docker" data-cursor-label="TOGGLE">Docker</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="PyTorch" data-cursor-label="TOGGLE">PyTorch</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="PostgreSQL" data-cursor-label="TOGGLE">PostgreSQL</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="Playwright" data-cursor-label="TOGGLE">Playwright</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="TailwindCSS" data-cursor-label="TOGGLE">TailwindCSS</button>
+                <button type="button" class="pill-skill px-4 py-2 rounded-full border border-white/10 bg-surface text-xs font-mono text-zinc-300 hover:border-white/40" data-skill="Kubernetes" data-cursor-label="TOGGLE">Kubernetes</button>
+              </div>
+              <p class="text-[11px] font-mono text-rose-400 hidden" id="err-skills">Please choose at least 2 technologies</p>
+            </div>
+
+            <!-- Target Compensation Slider -->
+            <div class="p-6 border border-white/10 bg-surface-card rounded-lg space-y-4">
+              <div class="flex justify-between items-end font-mono">
+                <div>
+                  <span class="text-[11px] text-zinc-400 uppercase tracking-widest block">Expected Compensation</span>
+                  <span class="text-xs text-zinc-500">Base salary target (USD)</span>
+                </div>
+                <div class="text-right">
+                  <span id="val-salary" class="text-2xl font-display font-bold text-white">$145,000</span>
+                </div>
+              </div>
+              <input type="range" id="range-salary" min="80000" max="260000" value="145000" step="5000" 
+                class="w-full h-1 bg-zinc-800 rounded-none appearance-none hoverable-slider" data-cursor-label="DRAG">
+            </div>
+
+          </div>
+        </div>
+
+        <!-- =================== STEP 3: ENGINEERING MINDSET =================== -->
+        <div class="w-1/4 flex-shrink-0 px-2 sm:px-4" id="view-step-2">
+          <div class="space-y-6">
+            
+            <div class="space-y-1">
+              <div class="mask-overflow">
+                <span class="mask-line font-mono text-xs text-acid tracking-widest uppercase font-semibold">03 / ARCHITECTURAL PHILOSOPHY</span>
+              </div>
+              <div class="mask-overflow">
+                <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-white uppercase">
+                  Distributed Mindset
+                </h2>
+              </div>
+              <div class="mask-overflow">
+                <p class="mask-line text-sm text-zinc-400 font-light max-w-xl">
+                  We look for engineers who design with failure domains in mind. How do you construct antifragile infrastructure?
+                </p>
+              </div>
+            </div>
+
+            <!-- Code Scenario Card -->
+            <div class="p-5 border border-white/10 bg-zinc-950 font-mono text-xs text-zinc-300 leading-relaxed border-l-2 border-l-acid space-y-2">
+              <div class="text-zinc-500 flex items-center justify-between">
+                <span>// SCENARIO SPECIFICATION: PROTOCOL_RESILIENCE</span>
+                <span class="text-[10px] text-acid">REQUIRED_MIN_CHARS: 60</span>
+              </div>
+              <p class="text-zinc-300">
+                "Describe how you handle backpressure and guarantee zero state corruption during a 10x traffic surge on a transactional datastore."
+              </p>
+            </div>
+
+            <!-- Terminal Textarea -->
+            <div class="space-y-2">
+              <div class="relative">
+                <textarea id="field-mindset" rows="7" 
+                  placeholder="e.g. Introduce an asynchronous write-behind cache with Redis Cluster, enforce distributed token-bucket rate limiting at ingress Envoy proxy, use Kafka partitions for guaranteed sequence ordered writes, and place resilience4j circuit breakers with automatic fallback..."
+                  class="w-full bg-surface border border-white/10 p-4 text-xs font-mono text-white focus:outline-none focus:border-acid transition-colors leading-relaxed placeholder:text-zinc-600 hoverable-input"
+                  data-cursor-label="TYPE"></textarea>
+              </div>
+              <div class="flex justify-between items-center font-mono text-[11px]">
+                <span class="text-zinc-500">FORMAT: MARKDOWN / PLAIN TEXT</span>
+                <span id="char-meter" class="text-zinc-400">0 / 800 CHARACTERS</span>
+              </div>
+              <p class="text-[11px] font-mono text-rose-400 hidden" id="err-mindset">Insight too brief. Please provide deeper technical context (min 60 chars).</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- =================== STEP 4: SUMMARY & EMIT =================== -->
+        <div class="w-1/4 flex-shrink-0 px-2 sm:px-4" id="view-step-3">
+          <div class="space-y-6">
+            
+            <div class="space-y-1">
+              <div class="mask-overflow">
+                <span class="mask-line font-mono text-xs text-acid tracking-widest uppercase font-semibold">04 / APPLICATION EMISSION</span>
+              </div>
+              <div class="mask-overflow">
+                <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-white uppercase">
+                  Verify & Dispatch
+                </h2>
+              </div>
+              <div class="mask-overflow">
+                <p class="mask-line text-sm text-zinc-400 font-light max-w-xl">
+                  Audit your submission parameters before dispatching telemetry to the SHIPS engineering workforce.
+                </p>
+              </div>
+            </div>
+
+            <!-- Crency-style Monospace Dossier Card -->
+            <div class="border border-white/10 bg-surface-card p-6 rounded-lg space-y-4 font-mono text-xs">
+              <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                <span class="text-zinc-500 uppercase tracking-widest">CANDIDATE</span>
+                <span id="sum-name" class="text-white font-bold text-sm">-</span>
+              </div>
+              <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                <span class="text-zinc-500 uppercase tracking-widest">CONTACT</span>
+                <span id="sum-email" class="text-zinc-300">-</span>
+              </div>
+              <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                <span class="text-zinc-500 uppercase tracking-widest">TARGET ROLE</span>
+                <span id="sum-role" class="text-acid font-bold">-</span>
+              </div>
+              <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                <span class="text-zinc-500 uppercase tracking-widest">EXP & SALARY</span>
+                <span id="sum-exp-sal" class="text-white font-semibold">-</span>
+              </div>
+              <div class="border-b border-white/5 pb-3 space-y-2">
+                <span class="text-zinc-500 uppercase tracking-widest block">ACTIVATED TOOLCHAINS</span>
+                <div id="sum-skills" class="flex flex-wrap gap-1.5">
+                  <span class="text-zinc-600 italic">None</span>
+                </div>
+              </div>
+              <div class="space-y-1.5">
+                <span class="text-zinc-500 uppercase tracking-widest block">SYSTEM ARCHITECTURE PERSPECTIVE</span>
+                <p id="sum-mindset" class="text-zinc-300 text-[11px] line-clamp-3 bg-noir p-3 border border-white/5 leading-relaxed italic">-</p>
+              </div>
+            </div>
+
+            <!-- Confirmation Check -->
+            <div class="flex items-start gap-3 pt-2">
+              <input type="checkbox" id="field-agree" class="mt-1 w-4 h-4 bg-surface border-white/20 text-acid rounded-none focus:ring-0 cursor-pointer">
+              <label for="field-agree" class="text-xs font-mono text-zinc-400 select-none cursor-pointer">
+                I hereby sign this application payload and certify authentic authorship of all codebases & architectural patterns referenced.
               </label>
             </div>
-            <span class="text-xs text-rose-400 hidden mt-1" id="err-agreement">You must agree before submitting</span>
+            <p class="text-[11px] font-mono text-rose-400 hidden" id="err-agree">Signature authorization required to emit application</p>
+
           </div>
-        </section>
+        </div>
 
-      </div> <!-- /Slider Track -->
+      </div>
+    </div>
 
-      <!-- Action Footer (Buttons) -->
-      <div class="mt-8 pt-6 border-t border-slate-800/80 flex items-center justify-between">
-        <button type="button" id="btn-prev" class="magnetic-btn px-5 py-2.5 rounded-xl border border-slate-700 text-xs font-mono text-slate-400 hover:text-white hover:border-slate-500 transition-all opacity-0 pointer-events-none">
-          &larr; BACK
+    <!-- Navigation Action Bar -->
+    <div class="mt-12 pt-6 border-t border-white/10 flex items-center justify-between">
+      <button type="button" id="btn-back" 
+        class="magnetic-action font-mono text-xs text-zinc-400 hover:text-white px-5 py-3 border border-white/10 bg-surface opacity-0 pointer-events-none transition-colors"
+        data-cursor-label="BACK">
+        [ &larr; PREVIOUS ]
+      </button>
+
+      <div class="flex items-center gap-4">
+        <button type="button" id="btn-next" 
+          class="magnetic-action font-mono text-xs font-bold text-noir bg-chalk hover:bg-acid px-8 py-3.5 transition-colors flex items-center gap-2"
+          data-cursor-label="NEXT">
+          <span>CONTINUE</span>
+          <span>&rarr;</span>
         </button>
 
-        <div class="flex items-center gap-3">
-          <button type="button" id="btn-next" class="magnetic-btn px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-mono font-semibold text-white shadow-lg shadow-indigo-600/30 transition-all flex items-center gap-2">
-            <span>CONTINUE</span>
-            <span>&rarr;</span>
-          </button>
-
-          <button type="button" id="btn-submit" class="magnetic-btn hidden px-7 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-xs font-mono font-bold text-white shadow-lg shadow-emerald-500/30 transition-all flex items-center gap-2">
-            <span id="submit-spinner" class="hidden animate-spin">&#9696;</span>
-            <span id="submit-btn-text">EMIT APPLICATION</span>
-          </button>
-        </div>
+        <button type="button" id="btn-dispatch" 
+          class="magnetic-action hidden font-mono text-xs font-bold text-noir bg-acid hover:bg-lime-400 px-8 py-3.5 transition-all flex items-center gap-3"
+          data-cursor-label="SEND">
+          <span id="dispatch-spinner" class="hidden animate-spin">&#9696;</span>
+          <span id="dispatch-label">TRANSMIT DOSSIER</span>
+        </button>
       </div>
-
     </div>
+
   </main>
 
-  <!-- Success Modal Overlay -->
-  <div id="success-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center z-50 p-4">
-    <div class="glass-panel border border-emerald-500/40 rounded-2xl p-8 max-w-md w-full text-center shadow-2xl relative">
-      <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 flex items-center justify-center mx-auto mb-4 text-2xl">
+  <!-- Success Modal Terminal -->
+  <div id="modal-complete" class="fixed inset-0 bg-noir/90 backdrop-blur-2xl hidden items-center justify-center z-50 p-6">
+    <div class="border border-white/20 bg-surface-card p-8 md:p-12 max-w-lg w-full space-y-6 text-left relative">
+      <div class="w-12 h-12 rounded-full bg-acid/10 border border-acid text-acid flex items-center justify-center font-mono font-bold text-lg">
         &#10003;
       </div>
-      <span class="text-xs font-mono text-emerald-400 tracking-wider uppercase font-semibold">Transmission Acknowledged</span>
-      <h3 class="text-2xl font-bold text-white mt-1 mb-2">Application Received</h3>
-      <p class="text-xs text-slate-300 font-mono leading-relaxed mb-6">
-        Candidate telemetry has been staged into the SHIPS recruitment pipeline. Our engineers will audit your submission.
-      </p>
-      <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-[11px] font-mono text-slate-400 mb-6 text-left">
-        TRANSMISSION_ID: <span class="text-indigo-400 font-bold">SHIPS-2025-APP-0941</span><br>
-        STATUS: <span class="text-emerald-400 font-bold">PIPELINE_ROUTED</span>
+      <div class="space-y-1">
+        <span class="font-mono text-xs text-acid tracking-widest uppercase">PIPELINE ACKNOWLEDGED</span>
+        <h3 class="text-3xl font-display font-extrabold text-white uppercase">Dossier Stage Cleared</h3>
+        <p class="text-xs font-mono text-zinc-400 leading-relaxed pt-2">
+          Your telemetry has been routed into the SHIPS Autonomous Evaluation Queue supervised by ARISA. A confirmation token has been logged to the engineering cluster.
+        </p>
       </div>
-      <button type="button" onclick="location.reload()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-mono text-white transition-colors">
-        RESTART APPLICATION
+
+      <div class="bg-noir p-4 border border-white/10 font-mono text-[11px] text-zinc-400 space-y-1">
+        <div>ORCHESTRATOR: <span class="text-acid font-bold">ARISA_CHIEF_OF_STAFF</span></div>
+        <div>PAYLOAD_HASH: <span class="text-white">0x9f4a82b...c31</span></div>
+        <div>STATUS: <span class="text-emerald-400 font-bold">STAGED_FOR_CODE_AUDIT</span></div>
+      </div>
+
+      <button type="button" onclick="location.reload()" 
+        class="w-full py-3.5 bg-chalk hover:bg-acid text-noir font-mono text-xs font-bold transition-colors uppercase tracking-wider"
+        data-cursor-label="RELOAD">
+        Restart Intake Engine
       </button>
     </div>
   </div>
 
   <!-- Footer -->
-  <footer class="w-full py-4 text-center text-xs font-mono text-slate-600 border-t border-white/5">
-    SHIPS SOFTWARE HOUSE &copy; 2025 &bull; ARCHITECTURE SUPERVISED BY ARISA &bull; 60FPS GSAP/ANIME.JS
+  <footer class="w-full border-t border-white/5 py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between font-mono text-[11px] text-zinc-600 relative z-20">
+    <div>SHIPS SOFTWARE HOUSE &copy; 2025 • ALL RIGHTS RESERVED</div>
+    <div class="flex gap-4 mt-2 md:mt-0">
+      <span>CREATIVE DIRECTION: CRENCY AGENCY INSPIRED</span>
+      <span>•</span>
+      <span>GSAP INERTIA + ANIME SPRING</span>
+    </div>
   </footer>
 
-  <!-- ================= Application Script Logic ================= -->
+  <!-- ================= Application Logic & Animations ================= -->
   <script>
-    // Global Application State
-    const appState = {
-      currentStep: 0,
+    // State Architecture
+    const state = {
+      step: 0,
       totalSteps: 4,
       data: {
-        fullName: '',
+        name: '',
         email: '',
         github: '',
-        targetRole: '',
-        yearsExperience: 4,
+        role: '',
+        experience: 4,
         skills: [],
-        salaryExpectation: 140000,
+        salary: 145000,
         mindset: '',
-        agreement: false
+        agreed: false
       }
     };
 
-    // DOM Elements Cache
-    const sliderTrack = document.getElementById('form-slider-track');
-    const btnPrev = document.getElementById('btn-prev');
+    // DOM References
+    const slider = document.getElementById('steps-slider');
+    const btnBack = document.getElementById('btn-back');
     const btnNext = document.getElementById('btn-next');
-    const btnSubmit = document.getElementById('btn-submit');
-    const progressFill = document.getElementById('progress-fill');
-    const progressPercentage = document.getElementById('progress-percentage');
-    const currentStepDisplay = document.getElementById('current-step-display');
-    const stepIndicators = document.querySelectorAll('.step-indicator');
+    const btnDispatch = document.getElementById('btn-dispatch');
+    const numericProgress = document.getElementById('numeric-progress');
+    const navStageIndicator = document.getElementById('nav-stage-indicator');
+    const stepNavBtns = document.querySelectorAll('.step-nav-btn');
 
-    // Init Anime.js floating micro-motion for skill badges
-    function initFloatingBadges() {
-      anime({
-        targets: '.skill-badge',
-        translateY: () => anime.random(-3, 3),
-        duration: () => anime.random(2000, 3500),
-        direction: 'alternate',
-        loop: true,
-        easing: 'easeInOutQuad',
-        delay: anime.stagger(150)
+    const cursorFollower = document.getElementById('cursor-follower');
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorLabel = document.getElementById('cursor-label');
+    const ambientLight = document.getElementById('ambient-light');
+
+    // 1. Crency-Style Fluid Inertia Cursor with Lerp
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
+    const lerpFactor = 0.15;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      // Immediate Dot Move
+      cursorDot.style.left = `${mouseX}px`;
+      cursorDot.style.top = `${mouseY}px`;
+
+      // Ambient radial spotlight follows pointer
+      ambientLight.style.left = `${mouseX}px`;
+      ambientLight.style.top = `${mouseY}px`;
+    });
+
+    function renderCursorLoop() {
+      ringX += (mouseX - ringX) * lerpFactor;
+      ringY += (mouseY - ringY) * lerpFactor;
+      cursorFollower.style.left = `${ringX}px`;
+      cursorFollower.style.top = `${ringY}px`;
+      requestAnimationFrame(renderCursorLoop);
+    }
+    requestAnimationFrame(renderCursorLoop);
+
+    // Dynamic Cursor State Transformations
+    function attachCursorInteractions() {
+      const interactives = document.querySelectorAll('[data-cursor-label], input, button, .tilt-card, .pill-skill');
+      
+      interactives.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          const label = el.getAttribute('data-cursor-label') || 'VIEW';
+          cursorLabel.textContent = label;
+          cursorLabel.style.opacity = '1';
+          
+          cursorFollower.style.width = '70px';
+          cursorFollower.style.height = '70px';
+          cursorFollower.style.backgroundColor = '#a3e635';
+          cursorFollower.style.borderColor = '#a3e635';
+          cursorDot.style.opacity = '0';
+        });
+
+        el.addEventListener('mouseleave', () => {
+          cursorLabel.style.opacity = '0';
+          cursorFollower.style.width = '38px';
+          cursorFollower.style.height = '38px';
+          cursorFollower.style.backgroundColor = 'transparent';
+          cursorFollower.style.borderColor = 'rgba(255,255,255,0.45)';
+          cursorDot.style.opacity = '1';
+        });
       });
     }
 
-    // GSAP Step Slider Navigation
-    function goToStep(stepIndex) {
-      if (stepIndex < 0 || stepIndex >= appState.totalSteps) return;
+    // 2. 3D Card Tilt Physics (Crency-style responsive perspective)
+    function setup3DTiltCards() {
+      const cards = document.querySelectorAll('.tilt-card');
+      cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const rotateX = ((y - centerY) / centerY) * -9;
+          const rotateY = ((x - centerX) / centerX) * 9;
+
+          card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = `perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0px)`;
+        });
+      });
+    }
+
+    // 3. Magnetic Action Buttons
+    function setupMagneticButtons() {
+      const magnets = document.querySelectorAll('.magnetic-action');
+      magnets.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.25, ease: "power2.out" });
+        });
+        btn.addEventListener('mouseleave', () => {
+          gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.4)" });
+        });
+      });
+    }
+
+    // 4. Kinetic Typography Entrance Animation (Mask Overflow Lines)
+    function animateTextEntrance(stepIndex) {
+      const view = document.getElementById(`view-step-${stepIndex}`);
+      const lines = view.querySelectorAll('.mask-line');
       
-      const targetPercent = -(stepIndex * 25);
+      gsap.fromTo(lines, 
+        { y: "115%" }, 
+        { 
+          y: "0%", 
+          duration: 0.8, 
+          stagger: 0.08, 
+          ease: "power4.out" 
+        }
+      );
+    }
+
+    // 5. Slide Navigation with GSAP Horizontal Inertia
+    function navigateToStep(targetIndex) {
+      if (targetIndex < 0 || targetIndex >= state.totalSteps) return;
+
+      const xPercentTarget = -(targetIndex * 25);
       
-      // GSAP Horizontal Slide with Inertia / Easing
-      gsap.to(sliderTrack, {
-        xPercent: targetPercent,
-        duration: 0.75,
-        ease: "power3.inOut"
+      gsap.to(slider, {
+        xPercent: xPercentTarget,
+        duration: 0.85,
+        ease: "power4.inOut"
       });
 
-      // Anime.js Staggered Entrance for new slide items
-      const nextStepElement = document.getElementById(`step-${stepIndex}`);
-      anime({
-        targets: nextStepElement.querySelectorAll('.step-content-anim > *'),
-        opacity: [0, 1],
-        translateY: [15, 0],
-        duration: 600,
-        delay: anime.stagger(60, { start: 200 }),
-        easing: 'easeOutCubic'
-      });
+      state.step = targetIndex;
+      animateTextEntrance(targetIndex);
+      updateNavigationHUD();
 
-      appState.currentStep = stepIndex;
-      updateUIControls();
-      updateProgressIndicators();
-
-      if (stepIndex === 3) {
-        populateReviewData();
+      if (targetIndex === 3) {
+        populateDossier();
       }
     }
 
-    // UI State & Buttons Synchronization
-    function updateUIControls() {
-      currentStepDisplay.textContent = appState.currentStep + 1;
+    // Update HUD & Step Indicators
+    function updateNavigationHUD() {
+      const stages = ['01_IDENTITY', '02_STACK', '03_MINDSET', '04_SUMMARY'];
+      navStageIndicator.textContent = stages[state.step];
+      
+      const pct = Math.round(((state.step + 1) / state.totalSteps) * 100);
+      numericProgress.textContent = `${pct}%`;
 
-      // Prev Button Visibility
-      if (appState.currentStep === 0) {
-        gsap.to(btnPrev, { opacity: 0, pointerEvents: 'none', duration: 0.2 });
+      // Back button visibility
+      if (state.step === 0) {
+        gsap.to(btnBack, { opacity: 0, pointerEvents: 'none', duration: 0.2 });
       } else {
-        gsap.to(btnPrev, { opacity: 1, pointerEvents: 'auto', duration: 0.2 });
+        gsap.to(btnBack, { opacity: 1, pointerEvents: 'auto', duration: 0.2 });
       }
 
-      // Next vs Submit Button
-      if (appState.currentStep === appState.totalSteps - 1) {
+      // Next vs Dispatch
+      if (state.step === 3) {
         btnNext.classList.add('hidden');
-        btnSubmit.classList.remove('hidden');
+        btnDispatch.classList.remove('hidden');
       } else {
         btnNext.classList.remove('hidden');
-        btnSubmit.classList.add('hidden');
+        btnDispatch.classList.add('hidden');
       }
-    }
 
-    // Progress Bar and SVG Path Drawing
-    function updateProgressIndicators() {
-      const percentage = Math.round(((appState.currentStep + 1) / appState.totalSteps) * 100);
-      progressPercentage.textContent = `${percentage}%`;
-      progressFill.style.width = `${percentage}%`;
-
-      stepIndicators.forEach((indicator, idx) => {
-        const circle = indicator.querySelector('.step-circle');
-        const label = indicator.querySelector('span');
-
-        if (idx <= appState.currentStep) {
-          indicator.classList.remove('opacity-40');
-          circle.setAttribute('class', 'step-circle stroke-indigo-400');
-          label.classList.add('text-indigo-300', 'font-semibold');
-          label.classList.remove('text-slate-400');
-
-          // Anime.js stroke-dasharray animation
-          anime({
-            targets: circle,
-            strokeDashoffset: [anime.setDashoffset, 0],
-            easing: 'easeInOutSine',
-            duration: 500
-          });
+      // Nav Tabs
+      stepNavBtns.forEach((btn, idx) => {
+        const circle = btn.querySelector('span:first-child');
+        if (idx === state.step) {
+          btn.classList.remove('text-zinc-500');
+          btn.classList.add('text-white');
+          circle.classList.add('bg-acid', 'text-noir', 'border-acid');
+          circle.classList.remove('border-zinc-700', 'text-zinc-400');
+        } else if (idx < state.step) {
+          btn.classList.remove('text-zinc-500');
+          btn.classList.add('text-zinc-300');
+          circle.classList.remove('bg-acid', 'text-noir');
+          circle.classList.add('border-zinc-500', 'text-zinc-200');
         } else {
-          indicator.classList.add('opacity-40');
-          circle.setAttribute('class', 'step-circle stroke-slate-600');
-          label.classList.remove('text-indigo-300', 'font-semibold');
-          label.classList.add('text-slate-400');
+          btn.classList.add('text-zinc-500');
+          btn.classList.remove('text-white', 'text-zinc-300');
+          circle.classList.remove('bg-acid', 'text-noir', 'border-zinc-500');
+          circle.classList.add('border-zinc-700', 'text-zinc-400');
         }
       });
     }
 
-    // Validation Logic
-    function validateStep(step) {
-      let isValid = true;
+    // Validation Guard
+    function validateStep(stepIndex) {
+      let valid = true;
 
-      if (step === 0) {
-        const nameVal = document.getElementById('input-fullname').value.trim();
-        const emailVal = document.getElementById('input-email').value.trim();
-        const ghVal = document.getElementById('input-github').value.trim();
+      if (stepIndex === 0) {
+        const nameVal = document.getElementById('field-name').value.trim();
+        const emailVal = document.getElementById('field-email').value.trim();
+        const ghVal = document.getElementById('field-github').value.trim();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const ghRegex = /^https?:\/\/github\.com\/[A-Za-z0-9_.-]+\/?$/;
 
         if (nameVal.length < 2) {
-          document.getElementById('err-fullname').classList.remove('hidden');
-          isValid = false;
+          document.getElementById('err-name').classList.remove('hidden');
+          valid = false;
         } else {
-          document.getElementById('err-fullname').classList.add('hidden');
-          appState.data.fullName = nameVal;
+          document.getElementById('err-name').classList.add('hidden');
+          state.data.name = nameVal;
         }
 
         if (!emailRegex.test(emailVal)) {
           document.getElementById('err-email').classList.remove('hidden');
-          isValid = false;
+          valid = false;
         } else {
           document.getElementById('err-email').classList.add('hidden');
-          appState.data.email = emailVal;
+          state.data.email = emailVal;
         }
 
         if (!ghRegex.test(ghVal)) {
           document.getElementById('err-github').classList.remove('hidden');
-          isValid = false;
+          valid = false;
         } else {
           document.getElementById('err-github').classList.add('hidden');
-          appState.data.github = ghVal;
+          state.data.github = ghVal;
         }
 
-        if (!appState.data.targetRole) {
+        if (!state.data.role) {
           document.getElementById('err-role').classList.remove('hidden');
-          isValid = false;
+          valid = false;
         } else {
           document.getElementById('err-role').classList.add('hidden');
         }
       }
 
-      if (step === 1) {
-        if (appState.data.skills.length < 2) {
+      if (stepIndex === 1) {
+        if (state.data.skills.length < 2) {
           document.getElementById('err-skills').classList.remove('hidden');
-          isValid = false;
+          valid = false;
         } else {
           document.getElementById('err-skills').classList.add('hidden');
         }
       }
 
-      if (step === 2) {
-        const mindsetVal = document.getElementById('input-mindset').value.trim();
+      if (stepIndex === 2) {
+        const mindsetVal = document.getElementById('field-mindset').value.trim();
         if (mindsetVal.length < 60) {
           document.getElementById('err-mindset').classList.remove('hidden');
-          isValid = false;
+          valid = false;
         } else {
           document.getElementById('err-mindset').classList.add('hidden');
-          appState.data.mindset = mindsetVal;
+          state.data.mindset = mindsetVal;
         }
       }
 
-      if (step === 3) {
-        const agreed = document.getElementById('input-agreement').checked;
+      if (stepIndex === 3) {
+        const agreed = document.getElementById('field-agree').checked;
         if (!agreed) {
-          document.getElementById('err-agreement').classList.remove('hidden');
-          isValid = false;
+          document.getElementById('err-agree').classList.remove('hidden');
+          valid = false;
         } else {
-          document.getElementById('err-agreement').classList.add('hidden');
-          appState.data.agreement = true;
+          document.getElementById('err-agree').classList.add('hidden');
+          state.data.agreed = true;
         }
       }
 
-      return isValid;
+      return valid;
     }
 
-    // Populate Review Step with Live Collected Data
-    function populateReviewData() {
-      document.getElementById('review-name').textContent = appState.data.fullName || 'N/A';
-      document.getElementById('review-email').textContent = appState.data.email || 'N/A';
-      document.getElementById('review-role').textContent = appState.data.targetRole || 'None Selected';
-      document.getElementById('review-exp-salary').textContent = 
-        `${appState.data.yearsExperience} Yrs Exp • $${Number(appState.data.salaryExpectation).toLocaleString()}/yr`;
-      
-      const skillsBox = document.getElementById('review-skills');
-      skillsBox.innerHTML = '';
-      if (appState.data.skills.length === 0) {
-        skillsBox.innerHTML = '<span class="text-slate-500 italic">None selected</span>';
+    // Populate Review Dossier
+    function populateDossier() {
+      document.getElementById('sum-name').textContent = state.data.name || 'UNKNOWN';
+      document.getElementById('sum-email').textContent = state.data.email || 'N/A';
+      document.getElementById('sum-role').textContent = state.data.role || 'UNASSIGNED';
+      document.getElementById('sum-exp-sal').textContent = 
+        `${state.data.experience} YRS EXP • $${Number(state.data.salary).toLocaleString()} USD`;
+
+      const skillContainer = document.getElementById('sum-skills');
+      skillContainer.innerHTML = '';
+      if (state.data.skills.length === 0) {
+        skillContainer.innerHTML = '<span class="text-zinc-600 italic">None selected</span>';
       } else {
-        appState.data.skills.forEach(skill => {
-          const span = document.createElement('span');
-          span.className = 'px-2 py-0.5 rounded bg-indigo-900/60 border border-indigo-700/50 text-indigo-200 text-[10px]';
-          span.textContent = skill;
-          skillsBox.appendChild(span);
+        state.data.skills.forEach(s => {
+          const pill = document.createElement('span');
+          pill.className = 'px-2 py-0.5 border border-white/10 bg-white/5 text-zinc-300 text-[10px] font-mono';
+          pill.textContent = s;
+          skillContainer.appendChild(pill);
         });
       }
 
-      document.getElementById('review-mindset').textContent = appState.data.mindset || 'No response entered';
+      document.getElementById('sum-mindset').textContent = state.data.mindset || 'No response recorded.';
     }
 
-    // Magnetic Button Micro-Interactions (GSAP)
-    function setupMagneticButtons() {
-      const magnetics = document.querySelectorAll('.magnetic-btn');
-      magnetics.forEach(btn => {
-        btn.addEventListener('mousemove', (e) => {
-          const rect = btn.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          gsap.to(btn, {
-            x: x * 0.25,
-            y: y * 0.25,
-            duration: 0.3,
-            ease: "power2.out"
-          });
-        });
-        btn.addEventListener('mouseleave', () => {
-          gsap.to(btn, {
-            x: 0,
-            y: 0,
-            duration: 0.5,
-            ease: "elastic.out(1, 0.4)"
-          });
-        });
-      });
-    }
-
-    // Celebratory Physics Confetti Burst with Anime.js & Canvas
-    function launchConfettiBurst() {
+    // Crency-grade Particle Confetti Ring Explosion
+    function triggerSubmissionParticles() {
       const canvas = document.getElementById('confetti-canvas');
       const ctx = canvas.getContext('2d');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
       const particles = [];
-      const particleCount = 140;
-      const colors = ['#6366f1', '#38bdf8', '#34d399', '#f43f5e', '#fbbf24', '#ffffff'];
+      const count = 180;
+      const palette = ['#a3e635', '#ffffff', '#6366f1', '#18181b'];
 
-      for (let i = 0; i < particleCount; i++) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 8 + Math.random() * 18;
         particles.push({
           x: canvas.width / 2,
-          y: canvas.height * 0.65,
-          radius: anime.random(4, 8),
-          color: colors[anime.random(0, colors.length - 1)],
-          rotation: anime.random(0, 360),
-          speedX: anime.random(-14, 14),
-          speedY: anime.random(-22, -6),
-          friction: 0.96,
-          gravity: 0.45
+          y: canvas.height * 0.6,
+          vx: Math.cos(angle) * velocity,
+          vy: Math.sin(angle) * velocity - 3,
+          size: Math.random() * 6 + 2,
+          color: palette[Math.floor(Math.random() * palette.length)],
+          rotation: Math.random() * 360,
+          rotSpeed: Math.random() * 8 - 4,
+          gravity: 0.28,
+          drag: 0.96
         });
       }
 
-      const anim = anime({
-        duration: 3200,
+      anime({
+        duration: 2800,
         update: () => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           particles.forEach(p => {
-            p.speedX *= p.friction;
-            p.speedY *= p.friction;
-            p.speedY += p.gravity;
-            p.x += p.speedX;
-            p.y += p.speedY;
-            p.rotation += 4;
+            p.vx *= p.drag;
+            p.vy *= p.drag;
+            p.vy += p.gravity;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rotation += p.rotSpeed;
 
             ctx.save();
             ctx.translate(p.x, p.y);
             ctx.rotate((p.rotation * Math.PI) / 180);
             ctx.fillStyle = p.color;
-            ctx.fillRect(-p.radius / 2, -p.radius / 2, p.radius, p.radius);
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
             ctx.restore();
           });
         },
@@ -703,145 +1010,131 @@
       });
     }
 
-    // Bind Event Listeners
-    function initEventHandlers() {
-      // Role Cards Toggle
-      const roleCards = document.querySelectorAll('.role-card');
+    // Event Bindings
+    function initListeners() {
+      // Role Selection Cards
+      const roleCards = document.querySelectorAll('.tilt-card');
       roleCards.forEach(card => {
         card.addEventListener('click', () => {
-          roleCards.forEach(c => c.classList.remove('role-card-selected'));
-          card.classList.add('role-card-selected');
-          appState.data.targetRole = card.getAttribute('data-role');
+          roleCards.forEach(c => c.classList.remove('tilt-card-active'));
+          card.classList.add('tilt-card-active');
+          state.data.role = card.getAttribute('data-role');
           document.getElementById('err-role').classList.add('hidden');
 
-          // Subtle bounce with Anime.js
+          // Micro anime bounce
           anime({
             targets: card,
             scale: [0.97, 1],
-            duration: 350,
-            easing: 'easeOutElastic(1, .6)'
+            duration: 300,
+            easing: 'easeOutQuad'
           });
         });
       });
 
       // Experience Slider
-      const expSlider = document.getElementById('input-exp');
-      const expDisplay = document.getElementById('exp-display');
-      expSlider.addEventListener('input', (e) => {
-        const val = e.target.value;
-        appState.data.yearsExperience = parseInt(val, 10);
-        expDisplay.textContent = `${val} ${val === '1' ? 'Year' : 'Years'}`;
+      const rangeExp = document.getElementById('range-exp');
+      const valExp = document.getElementById('val-exp');
+      rangeExp.addEventListener('input', (e) => {
+        const val = e.target.value.padStart(2, '0');
+        valExp.textContent = val;
+        state.data.experience = parseInt(e.target.value, 10);
       });
 
       // Salary Slider
-      const salSlider = document.getElementById('input-salary');
-      const salDisplay = document.getElementById('salary-display');
-      salSlider.addEventListener('input', (e) => {
-        const val = e.target.value;
-        appState.data.salaryExpectation = parseInt(val, 10);
-        salDisplay.textContent = `$${Number(val).toLocaleString()}`;
+      const rangeSalary = document.getElementById('range-salary');
+      const valSalary = document.getElementById('val-salary');
+      rangeSalary.addEventListener('input', (e) => {
+        valSalary.textContent = `$${Number(e.target.value).toLocaleString()}`;
+        state.data.salary = parseInt(e.target.value, 10);
       });
 
-      // Skill Badges Toggle with Anime.js bounce
-      const skillBadges = document.querySelectorAll('.skill-badge');
-      skillBadges.forEach(badge => {
-        badge.addEventListener('click', () => {
-          const skill = badge.getAttribute('data-skill');
-          if (appState.data.skills.includes(skill)) {
-            appState.data.skills = appState.data.skills.filter(s => s !== skill);
-            badge.classList.remove('badge-selected');
+      // Skill Pills Toggle
+      const pills = document.querySelectorAll('.pill-skill');
+      const skillCounter = document.getElementById('skill-counter-badge');
+      pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          const skill = pill.getAttribute('data-skill');
+          if (state.data.skills.includes(skill)) {
+            state.data.skills = state.data.skills.filter(s => s !== skill);
+            pill.classList.remove('selected');
           } else {
-            appState.data.skills.push(skill);
-            badge.classList.add('badge-selected');
+            state.data.skills.push(skill);
+            pill.classList.add('selected');
             anime({
-              targets: badge,
-              scale: [0.85, 1.08, 1],
-              duration: 400,
+              targets: pill,
+              scale: [0.88, 1.05, 1],
+              duration: 350,
               easing: 'easeOutBack'
             });
           }
-          if (appState.data.skills.length >= 2) {
+          skillCounter.textContent = `${state.data.skills.length} SELECTED`;
+          if (state.data.skills.length >= 2) {
             document.getElementById('err-skills').classList.add('hidden');
           }
         });
       });
 
-      // Mindset Textarea Counter
-      const textMindset = document.getElementById('input-mindset');
-      const charCounter = document.getElementById('char-counter');
-      textMindset.addEventListener('input', (e) => {
+      // Mindset Textarea
+      const fieldMindset = document.getElementById('field-mindset');
+      const charMeter = document.getElementById('char-meter');
+      fieldMindset.addEventListener('input', (e) => {
         const len = e.target.value.length;
-        charCounter.textContent = `${len} / 1000`;
+        charMeter.textContent = `${len} / 800 CHARACTERS`;
         if (len >= 60) {
-          charCounter.classList.add('text-emerald-400');
-          charCounter.classList.remove('text-slate-400');
+          charMeter.classList.add('text-acid');
+          charMeter.classList.remove('text-zinc-400');
           document.getElementById('err-mindset').classList.add('hidden');
         } else {
-          charCounter.classList.remove('text-emerald-400');
-          charCounter.classList.add('text-slate-400');
+          charMeter.classList.remove('text-acid');
+          charMeter.classList.add('text-zinc-400');
         }
       });
 
-      // Step Indicators Direct Click
-      stepIndicators.forEach(indicator => {
-        indicator.addEventListener('click', () => {
-          const target = parseInt(indicator.getAttribute('data-step-target'), 10);
-          if (target < appState.currentStep) {
-            goToStep(target);
-          } else if (validateStep(appState.currentStep)) {
-            goToStep(target);
+      // Top Step Nav Tabs
+      stepNavBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = parseInt(btn.getAttribute('data-step'), 10);
+          if (target < state.step) {
+            navigateToStep(target);
+          } else if (validateStep(state.step)) {
+            navigateToStep(target);
           }
         });
       });
 
-      // Next Button Click
+      // Next & Back
       btnNext.addEventListener('click', () => {
-        if (validateStep(appState.currentStep)) {
-          goToStep(appState.currentStep + 1);
+        if (validateStep(state.step)) {
+          navigateToStep(state.step + 1);
         }
       });
-
-      // Prev Button Click
-      btnPrev.addEventListener('click', () => {
-        goToStep(appState.currentStep - 1);
+      btnBack.addEventListener('click', () => {
+        navigateToStep(state.step - 1);
       });
 
-      // Submit Button Morphing & Trigger
-      btnSubmit.addEventListener('click', () => {
+      // Final Submission Dispatch
+      btnDispatch.addEventListener('click', () => {
         if (!validateStep(3)) return;
 
-        const spinner = document.getElementById('submit-spinner');
-        const label = document.getElementById('submit-btn-text');
-
-        // State: Transmitting
-        btnSubmit.disabled = true;
-        spinner.classList.remove('hidden');
-        label.textContent = "SYNCHRONIZING WITH SHIPS NODE...";
+        btnDispatch.disabled = true;
+        document.getElementById('dispatch-spinner').classList.remove('hidden');
+        document.getElementById('dispatch-label').textContent = 'SYNCHRONIZING TELEMETRY...';
 
         setTimeout(() => {
-          // State: Complete
-          spinner.classList.add('hidden');
-          label.textContent = "TRANSMISSION COMPLETE";
-          btnSubmit.classList.remove('from-emerald-500', 'to-teal-500');
-          btnSubmit.classList.add('bg-emerald-600');
+          document.getElementById('dispatch-spinner').classList.add('hidden');
+          document.getElementById('dispatch-label').textContent = 'EMISSION COMPLETE';
+          triggerSubmissionParticles();
 
-          // Launch Confetti Burst
-          launchConfettiBurst();
-
-          // Show Modal
           setTimeout(() => {
-            const modal = document.getElementById('success-modal');
+            const modal = document.getElementById('modal-complete');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            anime({
-              targets: modal.firstElementChild,
-              scale: [0.8, 1],
-              opacity: [0, 1],
-              duration: 500,
-              easing: 'easeOutElastic(1, .8)'
-            });
-          }, 800);
-        }, 1400);
+            gsap.fromTo(modal.firstElementChild, 
+              { scale: 0.9, opacity: 0 }, 
+              { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out" }
+            );
+          }, 600);
+        }, 1200);
       });
 
       window.addEventListener('resize', () => {
@@ -853,13 +1146,14 @@
       });
     }
 
-    // App Initialization
+    // Ignition
     window.addEventListener('DOMContentLoaded', () => {
-      initFloatingBadges();
+      attachCursorInteractions();
+      setup3DTiltCards();
       setupMagneticButtons();
-      initEventHandlers();
-      updateUIControls();
-      updateProgressIndicators();
+      initListeners();
+      updateNavigationHUD();
+      animateTextEntrance(0);
     });
   </script>
 </body>
