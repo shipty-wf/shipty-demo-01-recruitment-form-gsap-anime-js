@@ -13,11 +13,13 @@
       theme: {
         extend: {
           colors: {
-            noir: '#08080a',
-            surface: '#111115',
-            'surface-card': '#15151b',
-            accent: '#6366f1',
-            acid: '#a3e635',
+            noir: '#0A0F1D',
+            surface: '#0F172A',
+            'surface-card': '#111C35',
+            accent: '#6366F1',
+            cyan: '#06B6D4',
+            neon: '#06B6D4',
+            acid: '#06B6D4',
             chalk: '#f4f4f5'
           },
           fontFamily: {
@@ -80,7 +82,7 @@
       color-scheme: dark;
     }
     html.dark body {
-      background-color: #08080a;
+      background-color: #0A0F1D;
       color: #f4f4f5;
     }
     html.dark .noise-layer {
@@ -88,16 +90,16 @@
       filter: none;
     }
     html.dark #ambient-light {
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0) 70%);
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(6, 182, 212, 0.06) 40%, rgba(99, 102, 241, 0) 70%);
     }
     html.dark #cursor-follower {
-      border: 1px solid rgba(255, 255, 255, 0.45);
+      border: 1px solid rgba(6, 182, 212, 0.5);
     }
     html.dark #cursor-dot {
       background: #ffffff;
     }
     html.dark #cursor-label {
-      color: #08080a;
+      color: #0A0F1D;
     }
 
     /* Film Grain Noise Texture */
@@ -216,20 +218,20 @@
       color: #ffffff !important;
     }
     html.dark .tilt-card {
-      background-color: #15151b;
+      background-color: #111C35;
       border-color: rgba(255, 255, 255, 0.1);
     }
     html.dark .tilt-card:hover {
       border-color: rgba(255, 255, 255, 0.3);
     }
     html.dark .tilt-card-active {
-      border-color: #a3e635 !important;
-      box-shadow: 0 0 35px rgba(163, 230, 53, 0.18) !important;
+      border-color: #06B6D4 !important;
+      box-shadow: 0 0 35px rgba(6, 182, 212, 0.22) !important;
       background: rgba(21, 21, 27, 0.9) !important;
     }
     html.dark .tilt-card-active .role-badge {
-      background: #a3e635 !important;
-      color: #08080a !important;
+      background: #06B6D4 !important;
+      color: #0A0F1D !important;
     }
 
     /* Skill Pill */
@@ -251,7 +253,7 @@
       font-weight: 700;
     }
     html.dark .pill-skill {
-      background-color: #111115;
+      background-color: #0F172A;
       border-color: rgba(255, 255, 255, 0.1);
       color: #d4d4d8;
     }
@@ -260,7 +262,7 @@
     }
     html.dark .pill-skill.selected {
       background-color: #f4f4f5 !important;
-      color: #08080a !important;
+      color: #0A0F1D !important;
       border-color: #f4f4f5 !important;
       font-weight: 700;
     }
@@ -279,9 +281,9 @@
       border: 2px solid #ffffff;
     }
     html.dark input[type="range"]::-webkit-slider-thumb {
-      background: #a3e635;
-      box-shadow: 0 0 14px rgba(163, 230, 53, 0.6);
-      border: 2px solid #08080a;
+      background: #06B6D4;
+      box-shadow: 0 0 14px rgba(6, 182, 212, 0.7);
+      border: 2px solid #0A0F1D;
     }
 
     #confetti-canvas {
@@ -869,9 +871,9 @@
           cursorFollower.style.width = '70px';
           cursorFollower.style.height = '70px';
           const isLight = htmlEl.classList.contains('light');
-          cursorFollower.style.backgroundColor = isLight ? '#09090b' : '#a3e635';
-          cursorFollower.style.borderColor = isLight ? '#09090b' : '#a3e635';
-          cursorLabel.style.color = isLight ? '#ffffff' : '#08080a';
+          cursorFollower.style.backgroundColor = isLight ? '#09090b' : '#06B6D4';
+          cursorFollower.style.borderColor = isLight ? '#09090b' : '#06B6D4';
+          cursorLabel.style.color = isLight ? '#ffffff' : '#0A0F1D';
           cursorDot.style.opacity = '0';
         });
 
@@ -1219,7 +1221,7 @@
       const isLight = htmlEl.classList.contains('light');
       const palette = isLight 
         ? ['#09090b', '#4f46e5', '#16a34a', '#e11d48', '#f59e0b', '#3b82f6']
-        : ['#a3e635', '#ffffff', '#6366f1', '#18181b', '#38bdf8'];
+        : ['#06B6D4', '#ffffff', '#6366F1', '#18181b', '#38bdf8'];
 
       for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
