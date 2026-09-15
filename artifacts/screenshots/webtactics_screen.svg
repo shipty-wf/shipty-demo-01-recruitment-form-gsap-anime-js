@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="1920" height="1080" fill="#0b0f19"/>
+  
+  <!-- Browser Chrome Window -->
+  <g id="browser-window">
+    <!-- Browser Header Bar -->
+    <rect x="40" y="30" width="1840" height="52" rx="10" fill="#1e293b"/>
+    <rect x="40" y="60" width="1840" height="22" fill="#1e293b"/>
+    <!-- Window Controls -->
+    <circle cx="75" cy="56" r="7" fill="#ef4444"/>
+    <circle cx="98" cy="56" r="7" fill="#f59e0b"/>
+    <circle cx="121" cy="56" r="7" fill="#10b981"/>
+    
+    <!-- URL Address Bar -->
+    <rect x="220" y="42" width="1480" height="28" rx="6" fill="#0f172a"/>
+    <!-- Lock Icon -->
+    <path d="M238 53 h8 v-3 a4 4 0 0 0 -8 0 v3 z M236 53 h12 v7 h-12 z" fill="#10b981" stroke="#10b981" stroke-width="1.2" fill-rule="evenodd"/>
+    <text x="260" y="61" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" fill="#94a3b8">https://webtactics.org/</text>
+    <text x="1650" y="61" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#38bdf8" font-weight="600">[shp-worker-01: PLAYWRIGHT HEADED]</text>
+  </g>
+
+  <!-- Browser Viewport / Web Page Canvas -->
+  <g id="web-canvas" transform="translate(40, 82)">
+    <rect width="1840" height="958" fill="#f8fafc" rx="0 0 10 10"/>
+
+    <!-- Navigation Bar -->
+    <rect width="1840" height="80" fill="#0f172a"/>
+    <text x="80" y="48" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="800" fill="#38bdf8" letter-spacing="-0.5">WebTactics</text>
+    <text x="1480" y="47" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" fill="#94a3b8" font-weight="500">Services</text>
+    <text x="1580" y="47" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" fill="#94a3b8" font-weight="500">Case Studies</text>
+    <text x="1700" y="47" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" fill="#94a3b8" font-weight="500">Contact</text>
+
+    <!-- Hero Section -->
+    <g id="hero" transform="translate(920, 220)" text-anchor="middle">
+      <!-- Badge -->
+      <rect x="-110" y="-50" width="220" height="32" rx="16" fill="#e0e7ff"/>
+      <text x="0" y="-29" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#4338ca">DIGITAL EXCELLENCE</text>
+      
+      <!-- Heading -->
+      <text x="0" y="35" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="56" font-weight="900" fill="#0f172a" letter-spacing="-1.5">Architecting Modern Web Experiences</text>
+      
+      <!-- Subtitle -->
+      <text x="0" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" fill="#64748b" font-weight="400">Empowering digital products through tactical engineering, responsive UX architecture, and robust automated workflows.</text>
+      
+      <!-- CTA Button -->
+      <rect x="-100" y="140" width="200" height="54" rx="8" fill="#2563eb"/>
+      <text x="0" y="173" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="700" fill="#ffffff">Get in Touch</text>
+    </g>
+
+    <!-- Feature Cards -->
+    <g id="cards" transform="translate(160, 520)">
+      <!-- Card 1 -->
+      <g filter="url(#shadow)">
+        <rect x="0" y="0" width="460" height="240" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+        <circle cx="50" cy="50" r="20" fill="#eff6ff"/>
+        <path d="M42 50 l6 6 l10 -12" stroke="#2563eb" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <text x="50" y="110" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="700" fill="#0f172a">Digital Strategy</text>
+        <text x="50" y="145" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#64748b" font-weight="400">Precision roadmapping and architectural</text>
+        <text x="50" y="170" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#64748b" font-weight="400">blueprints designed to align technology</text>
+        <text x="50" y="195" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#64748b" font-weight="400">investments with core business objectives.</text>
+      </g>
+
+      <!-- Card 2 -->
+      <g transform="translate(530, 0)" filter="url(#shadow)">
+        <rect x="0" y="0" width="460" height="240" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+        <circle cx="50" cy="50" r="20" fill="#f0fdf4"/>
+        <path d="M42 50 l6 6 l10 -12" stroke="#16a34a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <text x="50" y="110" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="700" fill="#0f172a">Performance &amp; QA</text>
+        <text x="50" y="145" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#64748b" font-weight="400">Rigorous automated end-to-end testing,</text>
+        <text x="50" y="170" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#64748b" font-weight="400">visual regression suites, and cross-browser</text>
+        <text x="50" y="195" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#64748b" font-weight="400">validation under real network constraints.</text>
+      </g>
+
+      <!-- Card 3 -->
+      <g transform="translate(1060, 0)" filter="url(#shadow)">
+        <rect x="0" y="0" width="460" height="240" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+        <circle cx="50" cy="50" r="20" fill="#faf5ff"/>
+        <path d="M42 50 l6 6 l10 -12" stroke="#9333ea" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <text x="50" y="110" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="700" fill="#0f172a">Cloud &amp; Delivery</text>
+        <text x="50" y="145" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#64748b" font-weight="400">Zero-downtime CI/CD deployment pipelines,</text>
+        <text x="50" y="170" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#64748b" font-weight="400">immutable container infrastructure, and</text>
+        <text x="50" y="195" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#64748b" font-weight="400">resilient release provenance tracking.</text>
+      </g>
+    </g>
+
+    <!-- Watermark / Provenance Footer -->
+    <rect y="890" width="1840" height="68" fill="#0f172a"/>
+    <text x="80" y="930" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" fill="#94a3b8">© 2025 WebTactics. All rights reserved.</text>
+    <text x="1760" y="930" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" fill="#38bdf8" text-anchor="end">QA Runner: Chika | Node: shp-worker-01 | Target: https://webtactics.org/</text>
+  </g>
+</svg>
