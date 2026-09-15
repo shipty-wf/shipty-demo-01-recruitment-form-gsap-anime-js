@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHIPS Software House — Engineering Recruitment Portal</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              900: '#0b0f19',
+              card: '#111827',
+              border: '#1f2937'
+            }
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+            sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Animation Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0b0f19 75%);
+    }
+    .font-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .role-card-selected {
+      border-color: #6366f1 !important;
+      background: rgba(99, 102, 241, 0.15) !important;
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
+    }
+    .badge-selected {
+      background-color: #6366f1 !important;
+      color: #ffffff !important;
+      border-color: #818cf8 !important;
+      transform: scale(1.05);
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #6366f1;
+      cursor: pointer;
+      box-shadow: 0 0 10px #6366f1;
+      border: 2px solid #ffffff;
+    }
+    #confetti-canvas {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden antialiased">
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Top Navigation & Header -->
+  <header class="w-full border-b border-white/5 py-4 px-6 md:px-12 flex items-center justify-between glass-panel sticky top-0 z-40">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/30">
+        S
+      </div>
+      <div>
+        <h1 class="text-sm font-semibold tracking-wide text-white uppercase">SHIPS Software House</h1>
+        <p class="text-xs text-indigo-400 font-mono">Talent Acquisition Engineering</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-4">
+      <span class="text-xs font-mono text-slate-400 hidden sm:inline-block">PIPELINE: <span class="text-emerald-400">GSAP+ANIME_v3</span></span>
+      <div class="px-3 py-1 rounded-full text-xs font-mono bg-indigo-950/80 border border-indigo-700/50 text-indigo-300">
+        Step <span id="current-step-display" class="font-bold text-white">1</span> of 4
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress Bar Container -->
+  <div class="w-full max-w-4xl mx-auto px-6 pt-6">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-xs font-mono uppercase tracking-widest text-slate-400">Workflow Completion</span>
+      <span id="progress-percentage" class="text-xs font-mono font-bold text-indigo-400">25%</span>
+    </div>
+    <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden relative">
+      <div id="progress-fill" class="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 w-1/4 rounded-full transition-all duration-300 ease-out"></div>
+    </div>
+
+    <!-- Interactive Step Indicators with SVG Path Draw -->
+    <div class="grid grid-cols-4 gap-2 mt-4 text-center">
+      <div class="step-indicator group flex flex-col items-center cursor-pointer" data-step-target="0">
+        <svg class="w-7 h-7 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle class="step-circle stroke-indigo-400" cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="64" stroke-dashoffset="0"/>
+          <text x="12" y="16" text-anchor="middle" font-size="11" fill="#fff" font-family="monospace">1</text>
+        </svg>
+        <span class="text-[11px] font-mono text-indigo-300 font-semibold">Identity</span>
+      </div>
+      <div class="step-indicator group flex flex-col items-center opacity-40 cursor-pointer" data-step-target="1">
+        <svg class="w-7 h-7 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle class="step-circle stroke-slate-500" cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="64" stroke-dashoffset="64"/>
+          <text x="12" y="16" text-anchor="middle" font-size="11" fill="#aaa" font-family="monospace">2</text>
+        </svg>
+        <span class="text-[11px] font-mono text-slate-400">Technical</span>
+      </div>
+      <div class="step-indicator group flex flex-col items-center opacity-40 cursor-pointer" data-step-target="2">
+        <svg class="w-7 h-7 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle class="step-circle stroke-slate-500" cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="64" stroke-dashoffset="64"/>
+          <text x="12" y="16" text-anchor="middle" font-size="11" fill="#aaa" font-family="monospace">3</text>
+        </svg>
+        <span class="text-[11px] font-mono text-slate-400">Mindset</span>
+      </div>
+      <div class="step-indicator group flex flex-col items-center opacity-40 cursor-pointer" data-step-target="3">
+        <svg class="w-7 h-7 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle class="step-circle stroke-slate-500" cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="64" stroke-dashoffset="64"/>
+          <text x="12" y="16" text-anchor="middle" font-size="11" fill="#aaa" font-family="monospace">4</text>
+        </svg>
+        <span class="text-[11px] font-mono text-slate-400">Review</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Carousel Viewport -->
+  <main class="w-full max-w-4xl mx-auto px-4 sm:px-6 my-6 flex-1 flex flex-col justify-center">
+    <div class="glass-panel rounded-2xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+      
+      <!-- Slider Track holding all 4 steps horizontally -->
+      <div id="form-slider-track" class="flex w-[400%] transition-none">
+        
+        <!-- ================= STEP 1: IDENTITY & ROLE ================= -->
+        <section class="w-1/4 flex-shrink-0 px-2 sm:px-4 form-step" id="step-0">
+          <div class="step-content-anim">
+            <span class="text-xs font-mono text-indigo-400 tracking-wider uppercase font-semibold">Step 01 / Basic Setup</span>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">Candidate Profile & Desired Focus</h2>
+            <p class="text-sm text-slate-400 mt-2 mb-6">Let's initialize your profile within the SHIPS engineering ecosystem.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-mono text-slate-300 mb-1.5">FULL LEGAL NAME *</label>
+                <input type="text" id="input-fullname" placeholder="Grace Hopper"
+                  class="w-full bg-slate-900/90 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono">
+                <span class="text-xs text-rose-400 hidden mt-1" id="err-fullname">Minimum 2 characters required</span>
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-slate-300 mb-1.5">WORK / PRIMARY EMAIL *</label>
+                <input type="email" id="input-email" placeholder="grace@naval.navy.mil"
+                  class="w-full bg-slate-900/90 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono">
+                <span class="text-xs text-rose-400 hidden mt-1" id="err-email">Valid corporate or personal email required</span>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <label class="block text-xs font-mono text-slate-300 mb-1.5">GITHUB PROFILE URL *</label>
+              <input type="url" id="input-github" placeholder="https://github.com/gracehopper"
+                class="w-full bg-slate-900/90 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono">
+              <span class="text-xs text-rose-400 hidden mt-1" id="err-github">Format must be: https://github.com/your-handle</span>
+            </div>
+
+            <div class="mt-6">
+              <label class="block text-xs font-mono text-slate-300 mb-2">TARGET SPECIALIZATION *</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="role-cards-container">
+                <div class="role-card cursor-pointer border border-slate-800 bg-slate-900/50 hover:bg-slate-800/80 rounded-xl p-3.5 transition-all flex items-center gap-3" data-role="AI Engineer">
+                  <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-mono font-bold text-sm">AI</div>
+                  <div>
+                    <div class="text-sm font-semibold text-white">AI Engineer</div>
+                    <div class="text-xs text-slate-400">LLMs, RAG, Evals, Model Routing</div>
+                  </div>
+                </div>
+                <div class="role-card cursor-pointer border border-slate-800 bg-slate-900/50 hover:bg-slate-800/80 rounded-xl p-3.5 transition-all flex items-center gap-3" data-role="Cloud/DevOps Engineer">
+                  <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-mono font-bold text-sm">CD</div>
+                  <div>
+                    <div class="text-sm font-semibold text-white">Cloud / DevOps</div>
+                    <div class="text-xs text-slate-400">K8s, Terraform, Docker, CI/CD</div>
+                  </div>
+                </div>
+                <div class="role-card cursor-pointer border border-slate-800 bg-slate-900/50 hover:bg-slate-800/80 rounded-xl p-3.5 transition-all flex items-center gap-3" data-role="Fullstack Engineer">
+                  <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-mono font-bold text-sm">FS</div>
+                  <div>
+                    <div class="text-sm font-semibold text-white">Fullstack Engineer</div>
+                    <div class="text-xs text-slate-400">FastAPI, TypeScript, Tailwind, React</div>
+                  </div>
+                </div>
+                <div class="role-card cursor-pointer border border-slate-800 bg-slate-900/50 hover:bg-slate-800/80 rounded-xl p-3.5 transition-all flex items-center gap-3" data-role="QA Automation Lead">
+                  <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono font-bold text-sm">QA</div>
+                  <div>
+                    <div class="text-sm font-semibold text-white">QA Lead</div>
+                    <div class="text-xs text-slate-400">Playwright, E2E, Regression Matrix</div>
+                  </div>
+                </div>
+              </div>
+              <span class="text-xs text-rose-400 hidden mt-1" id="err-role">Please select one role focus</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= STEP 2: TECHNICAL ARSENAL ================= -->
+        <section class="w-1/4 flex-shrink-0 px-2 sm:px-4 form-step" id="step-1">
+          <div class="step-content-anim">
+            <span class="text-xs font-mono text-indigo-400 tracking-wider uppercase font-semibold">Step 02 / Capabilities</span>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">Technical Arsenal & Experience</h2>
+            <p class="text-sm text-slate-400 mt-2 mb-6">Select your primary toolchains and tenure calibration.</p>
+
+            <!-- Experience Range Slider -->
+            <div class="mb-6 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-xs font-mono text-slate-300">YEARS OF PROFESSIONAL SOFTWARE ENGINEERING</label>
+                <span id="exp-display" class="font-mono font-bold text-indigo-400 text-base">4 Years</span>
+              </div>
+              <input type="range" id="input-exp" min="0" max="15" value="4" step="1" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+              <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+                <span>Entry (0)</span>
+                <span>Mid (3-5)</span>
+                <span>Senior (7-10)</span>
+                <span>Principal (15+)</span>
+              </div>
+            </div>
+
+            <!-- Floating Skill Badges with Anime.js bounce -->
+            <div class="mb-6">
+              <label class="block text-xs font-mono text-slate-300 mb-2">CORE SKILLS & TECHNOLOGIES (SELECT >= 2) *</label>
+              <div class="flex flex-wrap gap-2.5" id="skill-badges-container">
+                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="TypeScript">TypeScript</button>
+                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="Python">Python</button>
+                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="FastAPI">FastAPI</button>
+                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="Docker">Docker</button>
+                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="PyTorch">PyTorch</button>
+                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="TailwindCSS">TailwindCSS</button>
+                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="PostgreSQL">PostgreSQL</button>
+                <button type="button" class="skill-badge px-3.5 py-1.5 rounded-full text-xs font-mono border border-slate-700 bg-slate-900 text-slate-300 hover:border-indigo-400 transition-colors" data-skill="Playwright">Playwright</button>
+              </div>
+              <span class="text-xs text-rose-400 hidden mt-1" id="err-skills">Please choose at least 2 skill badges</span>
+            </div>
+
+            <!-- Compensation Expectations -->
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-xs font-mono text-slate-300">ANNUAL SALARY EXPECTATION (USD)</label>
+                <span id="salary-display" class="font-mono font-bold text-emerald-400 text-base">$140,000</span>
+              </div>
+              <input type="range" id="input-salary" min="70000" max="250000" value="140000" step="5000" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= STEP 3: ENGINEERING MINDSET ================= -->
+        <section class="w-1/4 flex-shrink-0 px-2 sm:px-4 form-step" id="step-2">
+          <div class="step-content-anim">
+            <span class="text-xs font-mono text-indigo-400 tracking-wider uppercase font-semibold">Step 03 / Architecture</span>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">Engineering Mindset & Resilience</h2>
+            <p class="text-sm text-slate-400 mt-2 mb-4">We evaluate how candidates balance fault isolation, concurrency, and telemetry.</p>
+
+            <div class="bg-slate-950/80 rounded-xl p-4 border border-slate-800 mb-4 font-mono text-xs text-indigo-300 leading-relaxed">
+              <span class="text-slate-500 select-none">// PROMPT SCENARIO:</span><br>
+              "Describe how you design a resilient distributed system handling unpredictable burst traffic while avoiding cascading database failures."
+            </div>
+
+            <div class="relative">
+              <textarea id="input-mindset" rows="7" placeholder="e.g. Implement token-bucket rate limiting at the API gateway layer, route traffic into asynchronous Kafka queues with dead-letter partitions, utilize circuit breakers (resilience4j pattern) around downstream PostgreSQL calls, and enforce idempotent writes..."
+                class="w-full bg-slate-900/90 border border-slate-700 rounded-xl p-4 text-xs font-mono text-slate-200 leading-relaxed focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"></textarea>
+              
+              <div class="flex justify-between items-center mt-2 font-mono text-xs">
+                <span class="text-slate-500">Min 60 characters required</span>
+                <span id="char-counter" class="text-slate-400">0 / 1000</span>
+              </div>
+              <span class="text-xs text-rose-400 hidden mt-1" id="err-mindset">Your technical reflection is too short (min 60 chars)</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= STEP 4: REVIEW & TRANSMIT ================= -->
+        <section class="w-1/4 flex-shrink-0 px-2 sm:px-4 form-step" id="step-3">
+          <div class="step-content-anim">
+            <span class="text-xs font-mono text-emerald-400 tracking-wider uppercase font-semibold">Step 04 / Dispatch</span>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">Application Review & Verification</h2>
+            <p class="text-sm text-slate-400 mt-2 mb-4">Verify your credentials prior to emitting application payload.</p>
+
+            <!-- Dynamic Review Card -->
+            <div class="bg-slate-900/90 border border-indigo-500/30 rounded-xl p-5 shadow-lg space-y-3 font-mono text-xs">
+              <div class="flex justify-between border-b border-slate-800 pb-2">
+                <span class="text-slate-400">CANDIDATE:</span>
+                <span id="review-name" class="text-white font-semibold">-</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-2">
+                <span class="text-slate-400">COMMUNICATION:</span>
+                <span id="review-email" class="text-indigo-300">-</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-2">
+                <span class="text-slate-400">TARGET ROLE:</span>
+                <span id="review-role" class="text-emerald-400 font-bold">-</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-2">
+                <span class="text-slate-400">EXPERIENCE & SALARY:</span>
+                <span id="review-exp-salary" class="text-white">-</span>
+              </div>
+              <div class="border-b border-slate-800 pb-2">
+                <span class="text-slate-400 block mb-1">TECH ARSENAL:</span>
+                <div id="review-skills" class="flex flex-wrap gap-1.5">
+                  <span class="text-slate-500 italic">None selected</span>
+                </div>
+              </div>
+              <div>
+                <span class="text-slate-400 block mb-1">MINDSET PREVIEW:</span>
+                <p id="review-mindset" class="text-slate-300 text-[11px] line-clamp-2 italic bg-slate-950/60 p-2 rounded border border-slate-800/80">-</p>
+              </div>
+            </div>
+
+            <!-- Agreement Checkbox -->
+            <div class="mt-4 flex items-start gap-3">
+              <input type="checkbox" id="input-agreement" class="mt-1 w-4 h-4 rounded bg-slate-800 border-slate-700 text-indigo-600 focus:ring-indigo-500 cursor-pointer">
+              <label for="input-agreement" class="text-xs text-slate-400 select-none cursor-pointer">
+                I attest that all submitted telemetry is authentic and authorize SHIPS Software House to evaluate my codebase & profile.
+              </label>
+            </div>
+            <span class="text-xs text-rose-400 hidden mt-1" id="err-agreement">You must agree before submitting</span>
+          </div>
+        </section>
+
+      </div> <!-- /Slider Track -->
+
+      <!-- Action Footer (Buttons) -->
+      <div class="mt-8 pt-6 border-t border-slate-800/80 flex items-center justify-between">
+        <button type="button" id="btn-prev" class="magnetic-btn px-5 py-2.5 rounded-xl border border-slate-700 text-xs font-mono text-slate-400 hover:text-white hover:border-slate-500 transition-all opacity-0 pointer-events-none">
+          &larr; BACK
+        </button>
+
+        <div class="flex items-center gap-3">
+          <button type="button" id="btn-next" class="magnetic-btn px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-mono font-semibold text-white shadow-lg shadow-indigo-600/30 transition-all flex items-center gap-2">
+            <span>CONTINUE</span>
+            <span>&rarr;</span>
+          </button>
+
+          <button type="button" id="btn-submit" class="magnetic-btn hidden px-7 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-xs font-mono font-bold text-white shadow-lg shadow-emerald-500/30 transition-all flex items-center gap-2">
+            <span id="submit-spinner" class="hidden animate-spin">&#9696;</span>
+            <span id="submit-btn-text">EMIT APPLICATION</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Success Modal Overlay -->
+  <div id="success-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center z-50 p-4">
+    <div class="glass-panel border border-emerald-500/40 rounded-2xl p-8 max-w-md w-full text-center shadow-2xl relative">
+      <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 flex items-center justify-center mx-auto mb-4 text-2xl">
+        &#10003;
+      </div>
+      <span class="text-xs font-mono text-emerald-400 tracking-wider uppercase font-semibold">Transmission Acknowledged</span>
+      <h3 class="text-2xl font-bold text-white mt-1 mb-2">Application Received</h3>
+      <p class="text-xs text-slate-300 font-mono leading-relaxed mb-6">
+        Candidate telemetry has been staged into the SHIPS recruitment pipeline. Our engineers will audit your submission.
+      </p>
+      <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-[11px] font-mono text-slate-400 mb-6 text-left">
+        TRANSMISSION_ID: <span class="text-indigo-400 font-bold">SHIPS-2025-APP-0941</span><br>
+        STATUS: <span class="text-emerald-400 font-bold">PIPELINE_ROUTED</span>
+      </div>
+      <button type="button" onclick="location.reload()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-mono text-white transition-colors">
+        RESTART APPLICATION
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full py-4 text-center text-xs font-mono text-slate-600 border-t border-white/5">
+    SHIPS SOFTWARE HOUSE &copy; 2025 &bull; ARCHITECTURE SUPERVISED BY ARISA &bull; 60FPS GSAP/ANIME.JS
+  </footer>
+
+  <!-- ================= Application Script Logic ================= -->
+  <script>
+    // Global Application State
+    const appState = {
+      currentStep: 0,
+      totalSteps: 4,
+      data: {
+        fullName: '',
+        email: '',
+        github: '',
+        targetRole: '',
+        yearsExperience: 4,
+        skills: [],
+        salaryExpectation: 140000,
+        mindset: '',
+        agreement: false
+      }
+    };
+
+    // DOM Elements Cache
+    const sliderTrack = document.getElementById('form-slider-track');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const btnSubmit = document.getElementById('btn-submit');
+    const progressFill = document.getElementById('progress-fill');
+    const progressPercentage = document.getElementById('progress-percentage');
+    const currentStepDisplay = document.getElementById('current-step-display');
+    const stepIndicators = document.querySelectorAll('.step-indicator');
+
+    // Init Anime.js floating micro-motion for skill badges
+    function initFloatingBadges() {
+      anime({
+        targets: '.skill-badge',
+        translateY: () => anime.random(-3, 3),
+        duration: () => anime.random(2000, 3500),
+        direction: 'alternate',
+        loop: true,
+        easing: 'easeInOutQuad',
+        delay: anime.stagger(150)
+      });
+    }
+
+    // GSAP Step Slider Navigation
+    function goToStep(stepIndex) {
+      if (stepIndex < 0 || stepIndex >= appState.totalSteps) return;
+      
+      const targetPercent = -(stepIndex * 25);
+      
+      // GSAP Horizontal Slide with Inertia / Easing
+      gsap.to(sliderTrack, {
+        xPercent: targetPercent,
+        duration: 0.75,
+        ease: "power3.inOut"
+      });
+
+      // Anime.js Staggered Entrance for new slide items
+      const nextStepElement = document.getElementById(`step-${stepIndex}`);
+      anime({
+        targets: nextStepElement.querySelectorAll('.step-content-anim > *'),
+        opacity: [0, 1],
+        translateY: [15, 0],
+        duration: 600,
+        delay: anime.stagger(60, { start: 200 }),
+        easing: 'easeOutCubic'
+      });
+
+      appState.currentStep = stepIndex;
+      updateUIControls();
+      updateProgressIndicators();
+
+      if (stepIndex === 3) {
+        populateReviewData();
+      }
+    }
+
+    // UI State & Buttons Synchronization
+    function updateUIControls() {
+      currentStepDisplay.textContent = appState.currentStep + 1;
+
+      // Prev Button Visibility
+      if (appState.currentStep === 0) {
+        gsap.to(btnPrev, { opacity: 0, pointerEvents: 'none', duration: 0.2 });
+      } else {
+        gsap.to(btnPrev, { opacity: 1, pointerEvents: 'auto', duration: 0.2 });
+      }
+
+      // Next vs Submit Button
+      if (appState.currentStep === appState.totalSteps - 1) {
+        btnNext.classList.add('hidden');
+        btnSubmit.classList.remove('hidden');
+      } else {
+        btnNext.classList.remove('hidden');
+        btnSubmit.classList.add('hidden');
+      }
+    }
+
+    // Progress Bar and SVG Path Drawing
+    function updateProgressIndicators() {
+      const percentage = Math.round(((appState.currentStep + 1) / appState.totalSteps) * 100);
+      progressPercentage.textContent = `${percentage}%`;
+      progressFill.style.width = `${percentage}%`;
+
+      stepIndicators.forEach((indicator, idx) => {
+        const circle = indicator.querySelector('.step-circle');
+        const label = indicator.querySelector('span');
+
+        if (idx <= appState.currentStep) {
+          indicator.classList.remove('opacity-40');
+          circle.setAttribute('class', 'step-circle stroke-indigo-400');
+          label.classList.add('text-indigo-300', 'font-semibold');
+          label.classList.remove('text-slate-400');
+
+          // Anime.js stroke-dasharray animation
+          anime({
+            targets: circle,
+            strokeDashoffset: [anime.setDashoffset, 0],
+            easing: 'easeInOutSine',
+            duration: 500
+          });
+        } else {
+          indicator.classList.add('opacity-40');
+          circle.setAttribute('class', 'step-circle stroke-slate-600');
+          label.classList.remove('text-indigo-300', 'font-semibold');
+          label.classList.add('text-slate-400');
+        }
+      });
+    }
+
+    // Validation Logic
+    function validateStep(step) {
+      let isValid = true;
+
+      if (step === 0) {
+        const nameVal = document.getElementById('input-fullname').value.trim();
+        const emailVal = document.getElementById('input-email').value.trim();
+        const ghVal = document.getElementById('input-github').value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const ghRegex = /^https?:\/\/github\.com\/[A-Za-z0-9_.-]+\/?$/;
+
+        if (nameVal.length < 2) {
+          document.getElementById('err-fullname').classList.remove('hidden');
+          isValid = false;
+        } else {
+          document.getElementById('err-fullname').classList.add('hidden');
+          appState.data.fullName = nameVal;
+        }
+
+        if (!emailRegex.test(emailVal)) {
+          document.getElementById('err-email').classList.remove('hidden');
+          isValid = false;
+        } else {
+          document.getElementById('err-email').classList.add('hidden');
+          appState.data.email = emailVal;
+        }
+
+        if (!ghRegex.test(ghVal)) {
+          document.getElementById('err-github').classList.remove('hidden');
+          isValid = false;
+        } else {
+          document.getElementById('err-github').classList.add('hidden');
+          appState.data.github = ghVal;
+        }
+
+        if (!appState.data.targetRole) {
+          document.getElementById('err-role').classList.remove('hidden');
+          isValid = false;
+        } else {
+          document.getElementById('err-role').classList.add('hidden');
+        }
+      }
+
+      if (step === 1) {
+        if (appState.data.skills.length < 2) {
+          document.getElementById('err-skills').classList.remove('hidden');
+          isValid = false;
+        } else {
+          document.getElementById('err-skills').classList.add('hidden');
+        }
+      }
+
+      if (step === 2) {
+        const mindsetVal = document.getElementById('input-mindset').value.trim();
+        if (mindsetVal.length < 60) {
+          document.getElementById('err-mindset').classList.remove('hidden');
+          isValid = false;
+        } else {
+          document.getElementById('err-mindset').classList.add('hidden');
+          appState.data.mindset = mindsetVal;
+        }
+      }
+
+      if (step === 3) {
+        const agreed = document.getElementById('input-agreement').checked;
+        if (!agreed) {
+          document.getElementById('err-agreement').classList.remove('hidden');
+          isValid = false;
+        } else {
+          document.getElementById('err-agreement').classList.add('hidden');
+          appState.data.agreement = true;
+        }
+      }
+
+      return isValid;
+    }
+
+    // Populate Review Step with Live Collected Data
+    function populateReviewData() {
+      document.getElementById('review-name').textContent = appState.data.fullName || 'N/A';
+      document.getElementById('review-email').textContent = appState.data.email || 'N/A';
+      document.getElementById('review-role').textContent = appState.data.targetRole || 'None Selected';
+      document.getElementById('review-exp-salary').textContent = 
+        `${appState.data.yearsExperience} Yrs Exp • $${Number(appState.data.salaryExpectation).toLocaleString()}/yr`;
+      
+      const skillsBox = document.getElementById('review-skills');
+      skillsBox.innerHTML = '';
+      if (appState.data.skills.length === 0) {
+        skillsBox.innerHTML = '<span class="text-slate-500 italic">None selected</span>';
+      } else {
+        appState.data.skills.forEach(skill => {
+          const span = document.createElement('span');
+          span.className = 'px-2 py-0.5 rounded bg-indigo-900/60 border border-indigo-700/50 text-indigo-200 text-[10px]';
+          span.textContent = skill;
+          skillsBox.appendChild(span);
+        });
+      }
+
+      document.getElementById('review-mindset').textContent = appState.data.mindset || 'No response entered';
+    }
+
+    // Magnetic Button Micro-Interactions (GSAP)
+    function setupMagneticButtons() {
+      const magnetics = document.querySelectorAll('.magnetic-btn');
+      magnetics.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          gsap.to(btn, {
+            x: x * 0.25,
+            y: y * 0.25,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        });
+        btn.addEventListener('mouseleave', () => {
+          gsap.to(btn, {
+            x: 0,
+            y: 0,
+            duration: 0.5,
+            ease: "elastic.out(1, 0.4)"
+          });
+        });
+      });
+    }
+
+    // Celebratory Physics Confetti Burst with Anime.js & Canvas
+    function launchConfettiBurst() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const particleCount = 140;
+      const colors = ['#6366f1', '#38bdf8', '#34d399', '#f43f5e', '#fbbf24', '#ffffff'];
+
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height * 0.65,
+          radius: anime.random(4, 8),
+          color: colors[anime.random(0, colors.length - 1)],
+          rotation: anime.random(0, 360),
+          speedX: anime.random(-14, 14),
+          speedY: anime.random(-22, -6),
+          friction: 0.96,
+          gravity: 0.45
+        });
+      }
+
+      const anim = anime({
+        duration: 3200,
+        update: () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles.forEach(p => {
+            p.speedX *= p.friction;
+            p.speedY *= p.friction;
+            p.speedY += p.gravity;
+            p.x += p.speedX;
+            p.y += p.speedY;
+            p.rotation += 4;
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.radius / 2, -p.radius / 2, p.radius, p.radius);
+            ctx.restore();
+          });
+        },
+        complete: () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      });
+    }
+
+    // Bind Event Listeners
+    function initEventHandlers() {
+      // Role Cards Toggle
+      const roleCards = document.querySelectorAll('.role-card');
+      roleCards.forEach(card => {
+        card.addEventListener('click', () => {
+          roleCards.forEach(c => c.classList.remove('role-card-selected'));
+          card.classList.add('role-card-selected');
+          appState.data.targetRole = card.getAttribute('data-role');
+          document.getElementById('err-role').classList.add('hidden');
+
+          // Subtle bounce with Anime.js
+          anime({
+            targets: card,
+            scale: [0.97, 1],
+            duration: 350,
+            easing: 'easeOutElastic(1, .6)'
+          });
+        });
+      });
+
+      // Experience Slider
+      const expSlider = document.getElementById('input-exp');
+      const expDisplay = document.getElementById('exp-display');
+      expSlider.addEventListener('input', (e) => {
+        const val = e.target.value;
+        appState.data.yearsExperience = parseInt(val, 10);
+        expDisplay.textContent = `${val} ${val === '1' ? 'Year' : 'Years'}`;
+      });
+
+      // Salary Slider
+      const salSlider = document.getElementById('input-salary');
+      const salDisplay = document.getElementById('salary-display');
+      salSlider.addEventListener('input', (e) => {
+        const val = e.target.value;
+        appState.data.salaryExpectation = parseInt(val, 10);
+        salDisplay.textContent = `$${Number(val).toLocaleString()}`;
+      });
+
+      // Skill Badges Toggle with Anime.js bounce
+      const skillBadges = document.querySelectorAll('.skill-badge');
+      skillBadges.forEach(badge => {
+        badge.addEventListener('click', () => {
+          const skill = badge.getAttribute('data-skill');
+          if (appState.data.skills.includes(skill)) {
+            appState.data.skills = appState.data.skills.filter(s => s !== skill);
+            badge.classList.remove('badge-selected');
+          } else {
+            appState.data.skills.push(skill);
+            badge.classList.add('badge-selected');
+            anime({
+              targets: badge,
+              scale: [0.85, 1.08, 1],
+              duration: 400,
+              easing: 'easeOutBack'
+            });
+          }
+          if (appState.data.skills.length >= 2) {
+            document.getElementById('err-skills').classList.add('hidden');
+          }
+        });
+      });
+
+      // Mindset Textarea Counter
+      const textMindset = document.getElementById('input-mindset');
+      const charCounter = document.getElementById('char-counter');
+      textMindset.addEventListener('input', (e) => {
+        const len = e.target.value.length;
+        charCounter.textContent = `${len} / 1000`;
+        if (len >= 60) {
+          charCounter.classList.add('text-emerald-400');
+          charCounter.classList.remove('text-slate-400');
+          document.getElementById('err-mindset').classList.add('hidden');
+        } else {
+          charCounter.classList.remove('text-emerald-400');
+          charCounter.classList.add('text-slate-400');
+        }
+      });
+
+      // Step Indicators Direct Click
+      stepIndicators.forEach(indicator => {
+        indicator.addEventListener('click', () => {
+          const target = parseInt(indicator.getAttribute('data-step-target'), 10);
+          if (target < appState.currentStep) {
+            goToStep(target);
+          } else if (validateStep(appState.currentStep)) {
+            goToStep(target);
+          }
+        });
+      });
+
+      // Next Button Click
+      btnNext.addEventListener('click', () => {
+        if (validateStep(appState.currentStep)) {
+          goToStep(appState.currentStep + 1);
+        }
+      });
+
+      // Prev Button Click
+      btnPrev.addEventListener('click', () => {
+        goToStep(appState.currentStep - 1);
+      });
+
+      // Submit Button Morphing & Trigger
+      btnSubmit.addEventListener('click', () => {
+        if (!validateStep(3)) return;
+
+        const spinner = document.getElementById('submit-spinner');
+        const label = document.getElementById('submit-btn-text');
+
+        // State: Transmitting
+        btnSubmit.disabled = true;
+        spinner.classList.remove('hidden');
+        label.textContent = "SYNCHRONIZING WITH SHIPS NODE...";
+
+        setTimeout(() => {
+          // State: Complete
+          spinner.classList.add('hidden');
+          label.textContent = "TRANSMISSION COMPLETE";
+          btnSubmit.classList.remove('from-emerald-500', 'to-teal-500');
+          btnSubmit.classList.add('bg-emerald-600');
+
+          // Launch Confetti Burst
+          launchConfettiBurst();
+
+          // Show Modal
+          setTimeout(() => {
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            anime({
+              targets: modal.firstElementChild,
+              scale: [0.8, 1],
+              opacity: [0, 1],
+              duration: 500,
+              easing: 'easeOutElastic(1, .8)'
+            });
+          }, 800);
+        }, 1400);
+      });
+
+      window.addEventListener('resize', () => {
+        const canvas = document.getElementById('confetti-canvas');
+        if (canvas) {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+      });
+    }
+
+    // App Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      initFloatingBadges();
+      setupMagneticButtons();
+      initEventHandlers();
+      updateUIControls();
+      updateProgressIndicators();
+    });
+  </script>
+</body>
+</html>
