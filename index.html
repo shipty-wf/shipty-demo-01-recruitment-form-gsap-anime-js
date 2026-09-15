@@ -16,19 +16,15 @@
             noir: '#080808',
             surface: '#151414',
             'surface-card': '#1a1919',
-            accent: '#7200f3',
-            violet: '#7200f3',
-            'royal-indigo': '#5a48f5',
-            'vivid-violet': '#8b2df5',
-            lavender: '#d7b7fb',
-            'soft-lavender': '#e7e4fe',
+            accent: '#ffd500',
+            gold: '#ffd500',
+            'gold-light': '#ffea75',
+            'gold-dark': '#e6c000',
+            amber: '#ffb700',
             peach: '#ff8044',
             coral: '#fda77f',
             chalk: '#f1f0ef',
-            slate: '#a8a6a5',
-            cyan: '#7200f3',
-            neon: '#8b2df5',
-            acid: '#7200f3'
+            slate: '#a8a6a5'
           },
           fontFamily: {
             display: ['Syne', 'sans-serif'],
@@ -68,11 +64,10 @@
       --bg-obsidian-deep: #080808;
       --bg-charcoal-card: #151414;
       --bg-charcoal-elevated: #1a1919;
-      --accent-violet: #7200f3;
-      --accent-indigo: #5a48f5;
-      --accent-vivid: #8b2df5;
-      --accent-lavender: #d7b7fb;
-      --accent-lavender-soft: #e7e4fe;
+      --accent-primary: #ffd500;
+      --accent-gold-light: #ffea75;
+      --accent-gold-dark: #e6c000;
+      --accent-amber: #ffb700;
       --accent-peach: #ff8044;
       --accent-coral: #fda77f;
       --text-offwhite: #f1f0ef;
@@ -90,16 +85,16 @@
       filter: invert(1);
     }
     html.light #ambient-light {
-      background: radial-gradient(circle, rgba(114, 0, 243, 0.07) 0%, rgba(90, 72, 245, 0.03) 40%, rgba(114, 0, 243, 0) 70%);
+      background: radial-gradient(circle, rgba(255, 213, 0, 0.1) 0%, rgba(255, 183, 0, 0.04) 40%, rgba(255, 213, 0, 0) 70%);
     }
     html.light #cursor-follower {
-      border: 1px solid rgba(114, 0, 243, 0.5);
+      border: 1px solid rgba(230, 192, 0, 0.6);
     }
     html.light #cursor-dot {
-      background: #7200f3;
+      background: #e6c000;
     }
     html.light #cursor-label {
-      color: #ffffff;
+      color: #080808;
     }
 
     /* Dark Mode Palette */
@@ -115,13 +110,13 @@
       filter: none;
     }
     html.dark #ambient-light {
-      background: radial-gradient(circle, rgba(114, 0, 243, 0.18) 0%, rgba(90, 72, 245, 0.09) 35%, rgba(255, 128, 68, 0.03) 60%, rgba(114, 0, 243, 0) 75%);
+      background: radial-gradient(circle, rgba(255, 213, 0, 0.18) 0%, rgba(255, 183, 0, 0.08) 35%, rgba(255, 128, 68, 0.03) 60%, rgba(255, 213, 0, 0) 75%);
     }
     html.dark #cursor-follower {
-      border: 1px solid rgba(139, 45, 245, 0.55);
+      border: 1px solid rgba(255, 213, 0, 0.65);
     }
     html.dark #cursor-dot {
-      background: #d7b7fb;
+      background: #ffd500;
     }
     html.dark #cursor-label {
       color: #080808;
@@ -231,17 +226,17 @@
       border-color: #e5e5e5;
     }
     html.light .tilt-card:hover {
-      border-color: #7200f3;
-      box-shadow: 0 8px 24px -6px rgba(114, 0, 243, 0.12);
+      border-color: #e6c000;
+      box-shadow: 0 8px 24px -6px rgba(255, 213, 0, 0.25);
     }
     html.light .tilt-card-active {
-      border-color: #7200f3 !important;
-      box-shadow: 0 12px 30px -8px rgba(114, 0, 243, 0.22) !important;
+      border-color: #ffd500 !important;
+      box-shadow: 0 12px 30px -8px rgba(255, 213, 0, 0.35) !important;
       background: #ffffff !important;
     }
     html.light .tilt-card-active .role-badge {
-      background: #7200f3 !important;
-      color: #ffffff !important;
+      background: #ffd500 !important;
+      color: #080808 !important;
     }
     html.dark .tilt-card {
       background-color: #151414;
@@ -249,17 +244,17 @@
       backdrop-filter: blur(12px);
     }
     html.dark .tilt-card:hover {
-      border-color: rgba(139, 45, 245, 0.5);
-      box-shadow: 0 0 24px rgba(114, 0, 243, 0.18);
+      border-color: rgba(255, 213, 0, 0.5);
+      box-shadow: 0 0 24px rgba(255, 213, 0, 0.2);
     }
     html.dark .tilt-card-active {
-      border-color: #7200f3 !important;
-      box-shadow: 0 0 35px rgba(114, 0, 243, 0.35), inset 0 0 15px rgba(139, 45, 245, 0.1) !important;
+      border-color: #ffd500 !important;
+      box-shadow: 0 0 35px rgba(255, 213, 0, 0.4), inset 0 0 15px rgba(255, 234, 117, 0.12) !important;
       background: rgba(26, 25, 25, 0.95) !important;
     }
     html.dark .tilt-card-active .role-badge {
-      background: linear-gradient(135deg, #7200f3, #8b2df5) !important;
-      color: #f1f0ef !important;
+      background: linear-gradient(135deg, #ffd500, #ffb700) !important;
+      color: #080808 !important;
     }
 
     /* Skill Pill */
@@ -272,14 +267,14 @@
       color: #383838;
     }
     html.light .pill-skill:hover {
-      border-color: #7200f3;
-      color: #7200f3;
+      border-color: #e6c000;
+      color: #b38600;
     }
     html.light .pill-skill.selected {
-      background-color: #7200f3 !important;
-      color: #ffffff !important;
-      border-color: #7200f3 !important;
-      box-shadow: 0 4px 14px rgba(114, 0, 243, 0.3);
+      background-color: #ffd500 !important;
+      color: #080808 !important;
+      border-color: #ffd500 !important;
+      box-shadow: 0 4px 14px rgba(255, 213, 0, 0.35);
       font-weight: 700;
     }
     html.dark .pill-skill {
@@ -288,14 +283,14 @@
       color: #a8a6a5;
     }
     html.dark .pill-skill:hover {
-      border-color: rgba(215, 183, 251, 0.4);
-      color: #f1f0ef;
+      border-color: rgba(255, 213, 0, 0.45);
+      color: #ffd500;
     }
     html.dark .pill-skill.selected {
-      background: linear-gradient(135deg, #7200f3, #5a48f5) !important;
-      color: #ffffff !important;
-      border-color: #8b2df5 !important;
-      box-shadow: 0 0 20px rgba(114, 0, 243, 0.45);
+      background: linear-gradient(135deg, #ffd500, #ffb700) !important;
+      color: #080808 !important;
+      border-color: #ffea75 !important;
+      box-shadow: 0 0 20px rgba(255, 213, 0, 0.45);
       font-weight: 700;
     }
 
@@ -308,13 +303,13 @@
       cursor: pointer;
     }
     html.light input[type="range"]::-webkit-slider-thumb {
-      background: #7200f3;
-      box-shadow: 0 0 12px rgba(114, 0, 243, 0.4);
-      border: 2px solid #ffffff;
+      background: #ffd500;
+      box-shadow: 0 0 12px rgba(255, 213, 0, 0.5);
+      border: 2px solid #080808;
     }
     html.dark input[type="range"]::-webkit-slider-thumb {
-      background: #8b2df5;
-      box-shadow: 0 0 16px rgba(114, 0, 243, 0.85);
+      background: #ffd500;
+      box-shadow: 0 0 16px rgba(255, 213, 0, 0.85);
       border: 2px solid #080808;
     }
 
@@ -328,7 +323,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between relative selection:bg-violet-600 selection:text-white dark:selection:bg-violet-600 dark:selection:text-white">
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-[#ffd500] selection:text-[#080808] dark:selection:bg-[#ffd500] dark:selection:text-[#080808]">
 
   <!-- Grain Shader Layer -->
   <div class="noise-layer"></div>
@@ -360,7 +355,7 @@
     <!-- Ticker Status -->
     <div class="hidden md:flex items-center gap-6 font-mono text-xs text-zinc-600 dark:text-zinc-400">
       <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-violet-600 dark:bg-violet animate-pulse shadow-[0_0_8px_#7200f3]"></span>
+        <span class="w-2 h-2 rounded-full bg-[#ffd500] animate-pulse shadow-[0_0_8px_#ffd500]"></span>
         <span>EXPERIENCE ENGINE: ONLINE</span>
       </div>
       <span class="text-zinc-300 dark:text-zinc-600">/</span>
@@ -380,14 +375,14 @@
 
       <!-- Auto Fill Sample Button -->
       <button type="button" id="btn-mock-fill" 
-        class="magnetic-action px-2.5 sm:px-3 py-1.5 border border-zinc-300 dark:border-violet/40 bg-zinc-100 hover:bg-violet-600 hover:text-white text-zinc-900 dark:bg-violet/15 dark:hover:bg-violet text-violet-600 dark:text-lavender dark:hover:text-white text-[11px] font-mono font-bold tracking-wider rounded transition-all flex items-center gap-1.5"
+        class="magnetic-action px-2.5 sm:px-3 py-1.5 border border-zinc-300 dark:border-[#ffd500]/40 bg-zinc-100 hover:bg-[#ffd500] hover:text-[#080808] text-zinc-900 dark:bg-[#ffd500]/15 dark:hover:bg-[#ffd500] text-amber-600 dark:text-[#ffd500] dark:hover:text-[#080808] text-[11px] font-mono font-bold tracking-wider rounded transition-all flex items-center gap-1.5"
         data-cursor-label="INJECT">
         <span>⚡ AUTO-FILL MOCK</span>
       </button>
 
       <div class="flex items-center gap-1">
         <span class="text-zinc-400 dark:text-zinc-500">[</span>
-        <span id="numeric-progress" class="text-violet-600 dark:text-lavender font-bold">25%</span>
+        <span id="numeric-progress" class="text-amber-600 dark:text-[#ffd500] font-bold">25%</span>
         <span class="text-zinc-400 dark:text-zinc-500">]</span>
       </div>
     </div>
@@ -421,8 +416,8 @@
     <!-- Top Step Pill Bar -->
     <div class="flex items-center justify-between mb-8 pb-4 border-b border-zinc-200 dark:border-white/10 font-mono text-xs transition-colors">
       <div class="flex items-center gap-4 sm:gap-8 md:gap-10">
-        <button type="button" class="step-nav-btn flex items-center gap-2 transition-all cursor-pointer" data-step="0">
-          <span class="w-5 h-5 rounded-full border border-violet-600 bg-violet-600 text-white dark:border-violet dark:bg-violet dark:text-white font-bold text-[10px] flex items-center justify-center shadow-[0_0_10px_rgba(114,0,243,0.5)]">1</span>
+        <button type="button" class="step-nav-btn flex items-center gap-2 transition-all cursor-pointer text-[#080808] dark:text-[#ffd500] font-bold" data-step="0">
+          <span class="w-5 h-5 rounded-full border border-[#ffd500] bg-[#ffd500] text-[#080808] font-bold text-[10px] flex items-center justify-center shadow-[0_0_12px_rgba(255,213,0,0.6)]">1</span>
           <span class="tracking-wider">IDENTITY</span>
         </button>
         <button type="button" class="step-nav-btn text-zinc-400 dark:text-zinc-500 flex items-center gap-2 transition-all cursor-pointer" data-step="1">
@@ -454,7 +449,7 @@
             
             <div class="space-y-1">
               <div class="mask-overflow">
-                <span class="mask-line font-mono text-xs text-violet-600 dark:text-lavender tracking-widest uppercase font-semibold">01 / CANDIDATE IDENTITY</span>
+                <span class="mask-line font-mono text-xs text-amber-600 dark:text-[#ffd500] tracking-widest uppercase font-semibold">01 / CANDIDATE IDENTITY</span>
               </div>
               <div class="mask-overflow">
                 <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-zinc-900 dark:text-white uppercase">
@@ -473,13 +468,13 @@
               <div class="space-y-1.5">
                 <label class="block font-mono text-[11px] text-zinc-600 dark:text-zinc-400 tracking-wider uppercase">Full Legal Name *</label>
                 <input type="text" id="field-name" placeholder="Grace Hopper"
-                  class="w-full bg-white dark:bg-surface border border-zinc-300 dark:border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-zinc-900 dark:text-white focus:outline-none focus:border-zinc-900 dark:focus:border-violet transition-colors placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
+                  class="w-full bg-white dark:bg-surface border border-zinc-300 dark:border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-zinc-900 dark:text-white focus:outline-none focus:border-zinc-900 dark:focus:border-[#ffd500] transition-colors placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
                 <p class="text-[11px] font-mono text-rose-500 hidden" id="err-name">Identity token invalid (min 2 characters)</p>
               </div>
               <div class="space-y-1.5">
                 <label class="block font-mono text-[11px] text-zinc-600 dark:text-zinc-400 tracking-wider uppercase">Corporate / Verified Email *</label>
                 <input type="email" id="field-email" placeholder="grace@navy.mil"
-                  class="w-full bg-white dark:bg-surface border border-zinc-300 dark:border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-zinc-900 dark:text-white focus:outline-none focus:border-zinc-900 dark:focus:border-violet transition-colors placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
+                  class="w-full bg-white dark:bg-surface border border-zinc-300 dark:border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-zinc-900 dark:text-white focus:outline-none focus:border-zinc-900 dark:focus:border-[#ffd500] transition-colors placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
                 <p class="text-[11px] font-mono text-rose-500 hidden" id="err-email">RFC-compliant email required</p>
               </div>
             </div>
@@ -487,7 +482,7 @@
             <div class="space-y-1.5">
               <label class="block font-mono text-[11px] text-zinc-600 dark:text-zinc-400 tracking-wider uppercase">GitHub Profile URL *</label>
               <input type="url" id="field-github" placeholder="https://github.com/gracehopper"
-                class="w-full bg-white dark:bg-surface border border-zinc-300 dark:border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-zinc-900 dark:text-white focus:outline-none focus:border-zinc-900 dark:focus:border-violet transition-colors placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
+                class="w-full bg-white dark:bg-surface border border-zinc-300 dark:border-white/10 rounded-none px-4 py-3.5 text-sm font-mono text-zinc-900 dark:text-white focus:outline-none focus:border-zinc-900 dark:focus:border-[#ffd500] transition-colors placeholder:text-zinc-400 dark:placeholder:text-zinc-600">
               <p class="text-[11px] font-mono text-rose-500 hidden" id="err-github">Must follow: https://github.com/handle</p>
             </div>
 
@@ -541,7 +536,7 @@
             
             <div class="space-y-1">
               <div class="mask-overflow">
-                <span class="mask-line font-mono text-xs text-violet-600 dark:text-lavender tracking-widest uppercase font-semibold">02 / TECHNICAL ARSENAL</span>
+                <span class="mask-line font-mono text-xs text-amber-600 dark:text-[#ffd500] tracking-widest uppercase font-semibold">02 / TECHNICAL ARSENAL</span>
               </div>
               <div class="mask-overflow">
                 <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-zinc-900 dark:text-white uppercase">
@@ -563,7 +558,7 @@
                   <span class="text-xs text-zinc-400 dark:text-zinc-500">Years writing production systems</span>
                 </div>
                 <div class="text-right">
-                  <span id="val-exp" class="text-2xl font-display font-bold text-zinc-900 dark:text-lavender">04</span>
+                  <span id="val-exp" class="text-2xl font-display font-bold text-zinc-900 dark:text-white">04</span>
                   <span class="text-xs text-zinc-500 dark:text-zinc-400 font-mono"> YEARS</span>
                 </div>
               </div>
@@ -621,7 +616,7 @@
             
             <div class="space-y-1">
               <div class="mask-overflow">
-                <span class="mask-line font-mono text-xs text-violet-600 dark:text-lavender tracking-widest uppercase font-semibold">03 / ARCHITECTURAL PHILOSOPHY</span>
+                <span class="mask-line font-mono text-xs text-amber-600 dark:text-[#ffd500] tracking-widest uppercase font-semibold">03 / ARCHITECTURAL PHILOSOPHY</span>
               </div>
               <div class="mask-overflow">
                 <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-zinc-900 dark:text-white uppercase">
@@ -636,10 +631,10 @@
             </div>
 
             <!-- Code Scenario Card -->
-            <div class="p-5 border border-zinc-200 dark:border-white/10 bg-zinc-100 dark:bg-zinc-950 font-mono text-xs text-zinc-800 dark:text-zinc-300 leading-relaxed border-l-4 border-l-zinc-900 dark:border-l-violet space-y-2 transition-colors">
+            <div class="p-5 border border-zinc-200 dark:border-white/10 bg-zinc-100 dark:bg-zinc-950 font-mono text-xs text-zinc-800 dark:text-zinc-300 leading-relaxed border-l-4 border-l-zinc-900 dark:border-l-[#ffd500] space-y-2 transition-colors">
               <div class="text-zinc-500 flex items-center justify-between">
                 <span>// SCENARIO SPECIFICATION: PROTOCOL_RESILIENCE</span>
-                <span class="text-[10px] text-violet-600 dark:text-lavender font-bold">REQUIRED_MIN_CHARS: 60</span>
+                <span class="text-[10px] text-amber-600 dark:text-[#ffd500] font-bold">REQUIRED_MIN_CHARS: 60</span>
               </div>
               <p class="text-zinc-700 dark:text-zinc-300">
                 "Describe how you handle backpressure and guarantee zero state corruption during a 10x traffic surge on a transactional datastore."
@@ -651,7 +646,7 @@
               <div class="relative">
                 <textarea id="field-mindset" rows="7" 
                   placeholder="e.g. Introduce an asynchronous write-behind cache with Redis Cluster, enforce distributed token-bucket rate limiting at ingress Envoy proxy, use Kafka partitions for guaranteed sequence ordered writes, and place resilience4j circuit breakers with automatic fallback..."
-                  class="w-full bg-white dark:bg-surface border border-zinc-300 dark:border-white/10 p-4 text-xs font-mono text-zinc-900 dark:text-white focus:outline-none focus:border-zinc-900 dark:focus:border-violet transition-colors leading-relaxed placeholder:text-zinc-400 dark:placeholder:text-zinc-600"
+                  class="w-full bg-white dark:bg-surface border border-zinc-300 dark:border-white/10 p-4 text-xs font-mono text-zinc-900 dark:text-white focus:outline-none focus:border-zinc-900 dark:focus:border-[#ffd500] transition-colors leading-relaxed placeholder:text-zinc-400 dark:placeholder:text-zinc-600"
                   data-cursor-label="TYPE"></textarea>
               </div>
               <div class="flex justify-between items-center font-mono text-[11px]">
@@ -670,7 +665,7 @@
             
             <div class="space-y-1">
               <div class="mask-overflow">
-                <span class="mask-line font-mono text-xs text-violet-600 dark:text-lavender tracking-widest uppercase font-semibold">04 / APPLICATION EMISSION</span>
+                <span class="mask-line font-mono text-xs text-amber-600 dark:text-[#ffd500] tracking-widest uppercase font-semibold">04 / APPLICATION EMISSION</span>
               </div>
               <div class="mask-overflow">
                 <h2 class="mask-line text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-zinc-900 dark:text-white uppercase">
@@ -696,7 +691,7 @@
               </div>
               <div class="flex justify-between items-center border-b border-zinc-100 dark:border-white/5 pb-3">
                 <span class="text-zinc-500 uppercase tracking-widest">TARGET ROLE</span>
-                <span id="sum-role" class="text-violet-600 dark:text-lavender font-bold">-</span>
+                <span id="sum-role" class="text-amber-600 dark:text-[#ffd500] font-bold">-</span>
               </div>
               <div class="flex justify-between items-center border-b border-zinc-100 dark:border-white/5 pb-3">
                 <span class="text-zinc-500 uppercase tracking-widest">EXP & SALARY</span>
@@ -716,7 +711,7 @@
 
             <!-- Confirmation Check -->
             <div class="flex items-start gap-3 pt-2">
-              <input type="checkbox" id="field-agree" class="mt-1 w-4 h-4 bg-white dark:bg-surface border-zinc-300 dark:border-white/20 text-zinc-900 dark:text-lavender rounded-none focus:ring-0 cursor-pointer">
+              <input type="checkbox" id="field-agree" class="mt-1 w-4 h-4 bg-white dark:bg-surface border-zinc-300 dark:border-white/20 text-[#ffd500] accent-[#ffd500] rounded-none focus:ring-0 cursor-pointer">
               <label for="field-agree" class="text-xs font-mono text-zinc-600 dark:text-zinc-400 select-none cursor-pointer">
                 I hereby sign this application payload and certify authentic authorship of all codebases & architectural patterns referenced.
               </label>
@@ -739,14 +734,14 @@
 
       <div class="flex items-center gap-4">
         <button type="button" id="btn-next" 
-          class="magnetic-action font-mono text-xs font-bold text-white bg-violet-600 hover:bg-violet-700 dark:bg-violet dark:hover:bg-royal-indigo px-8 py-3.5 transition-all shadow-[0_0_20px_rgba(114,0,243,0.35)] flex items-center gap-2"
+          class="magnetic-action font-mono text-xs font-bold text-[#080808] bg-[#ffd500] hover:bg-[#ffea75] px-8 py-3.5 transition-all shadow-[0_0_20px_rgba(255,213,0,0.45)] flex items-center gap-2"
           data-cursor-label="NEXT">
           <span>CONTINUE</span>
           <span>&rarr;</span>
         </button>
 
         <button type="button" id="btn-dispatch" 
-          class="magnetic-action hidden font-mono text-xs font-bold text-white bg-gradient-to-r from-violet to-royal-indigo hover:from-royal-indigo hover:to-vivid-violet px-8 py-3.5 transition-all shadow-[0_0_25px_rgba(114,0,243,0.5)] flex items-center gap-3"
+          class="magnetic-action hidden font-mono text-xs font-bold text-[#080808] bg-gradient-to-r from-[#ffd500] to-[#ffb700] hover:from-[#ffea75] hover:to-[#ffd500] px-8 py-3.5 transition-all shadow-[0_0_25px_rgba(255,213,0,0.55)] flex items-center gap-3"
           data-cursor-label="SEND">
           <span id="dispatch-spinner" class="hidden animate-spin">&#9696;</span>
           <span id="dispatch-label">TRANSMIT DOSSIER</span>
@@ -759,11 +754,11 @@
   <!-- Success Modal Terminal -->
   <div id="modal-complete" class="fixed inset-0 bg-zinc-900/60 dark:bg-noir/90 backdrop-blur-2xl hidden items-center justify-center z-50 p-6 transition-colors">
     <div class="border border-zinc-200 dark:border-white/20 bg-white dark:bg-surface-card p-8 md:p-12 max-w-lg w-full space-y-6 text-left relative shadow-2xl">
-      <div class="w-12 h-12 rounded-full bg-violet/15 dark:bg-violet/25 border border-violet-600 dark:border-violet text-violet-600 dark:text-lavender flex items-center justify-center font-mono font-bold text-lg shadow-[0_0_20px_rgba(114,0,243,0.35)]">
+      <div class="w-12 h-12 rounded-full bg-[#ffd500]/15 dark:bg-[#ffd500]/20 border border-[#ffd500] text-[#080808] dark:text-[#ffd500] flex items-center justify-center font-mono font-bold text-lg shadow-[0_0_20px_rgba(255,213,0,0.4)]">
         &#10003;
       </div>
       <div class="space-y-1">
-        <span class="font-mono text-xs text-violet-600 dark:text-lavender tracking-widest uppercase font-semibold">PIPELINE ACKNOWLEDGED</span>
+        <span class="font-mono text-xs text-amber-600 dark:text-[#ffd500] tracking-widest uppercase font-semibold">PIPELINE ACKNOWLEDGED</span>
         <h3 class="text-3xl font-display font-extrabold text-zinc-900 dark:text-white uppercase">Dossier Stage Cleared</h3>
         <p class="text-xs font-mono text-zinc-600 dark:text-zinc-400 leading-relaxed pt-2">
           Your telemetry has been routed into the SHIPS Autonomous Evaluation Queue supervised by ARISA. A confirmation token has been logged to the engineering cluster.
@@ -771,13 +766,13 @@
       </div>
 
       <div class="bg-zinc-100 dark:bg-noir p-4 border border-zinc-200 dark:border-white/10 font-mono text-[11px] text-zinc-700 dark:text-zinc-400 space-y-1">
-        <div>ORCHESTRATOR: <span class="text-violet-600 dark:text-lavender font-bold">ARISA_CHIEF_OF_STAFF</span></div>
+        <div>ORCHESTRATOR: <span class="text-amber-600 dark:text-[#ffd500] font-bold">ARISA_CHIEF_OF_STAFF</span></div>
         <div>PAYLOAD_HASH: <span class="text-zinc-900 dark:text-white font-mono">0x9f4a82b...c31</span></div>
-        <div>STATUS: <span class="text-violet-600 dark:text-lavender font-bold">STAGED_FOR_CODE_AUDIT</span></div>
+        <div>STATUS: <span class="text-amber-600 dark:text-[#ffd500] font-bold">STAGED_FOR_CODE_AUDIT</span></div>
       </div>
 
       <button type="button" onclick="location.reload()" 
-        class="w-full py-3.5 bg-violet-600 hover:bg-violet-700 dark:bg-violet dark:hover:bg-royal-indigo text-white font-mono text-xs font-bold transition-all shadow-[0_0_20px_rgba(114,0,243,0.35)] uppercase tracking-wider"
+        class="w-full py-3.5 bg-[#ffd500] hover:bg-[#ffea75] text-[#080808] font-mono text-xs font-bold transition-all shadow-[0_0_20px_rgba(255,213,0,0.45)] uppercase tracking-wider"
         data-cursor-label="RELOAD">
         Restart Intake Engine
       </button>
@@ -903,9 +898,9 @@
           cursorFollower.style.width = '70px';
           cursorFollower.style.height = '70px';
           const isLight = htmlEl.classList.contains('light');
-          cursorFollower.style.backgroundColor = isLight ? '#7200f3' : '#8b2df5';
-          cursorFollower.style.borderColor = isLight ? '#7200f3' : '#d7b7fb';
-          cursorLabel.style.color = '#ffffff';
+          cursorFollower.style.backgroundColor = '#ffd500';
+          cursorFollower.style.borderColor = '#ffd500';
+          cursorLabel.style.color = '#080808';
           cursorDot.style.opacity = '0';
         });
 
@@ -1025,8 +1020,8 @@
       stepNavBtns.forEach((btn, idx) => {
         const circle = btn.querySelector('span:first-child');
         if (idx === state.step) {
-          btn.className = `step-nav-btn flex items-center gap-2 transition-all cursor-pointer ${isLight ? 'text-violet-600 font-bold' : 'text-lavender font-bold'}`;
-          circle.className = `w-5 h-5 rounded-full border text-[10px] font-bold flex items-center justify-center ${isLight ? 'bg-violet-600 text-white border-violet-600 shadow-[0_0_10px_rgba(114,0,243,0.4)]' : 'bg-violet text-white border-violet shadow-[0_0_14px_#7200f3]'}`;
+          btn.className = `step-nav-btn flex items-center gap-2 transition-all cursor-pointer ${isLight ? 'text-[#080808] font-bold' : 'text-[#ffd500] font-bold'}`;
+          circle.className = `w-5 h-5 rounded-full border text-[10px] font-bold flex items-center justify-center bg-[#ffd500] text-[#080808] border-[#ffd500] shadow-[0_0_14px_rgba(255,213,0,0.6)]`;
         } else if (idx < state.step) {
           btn.className = `step-nav-btn flex items-center gap-2 transition-all cursor-pointer ${isLight ? 'text-zinc-600' : 'text-zinc-300'}`;
           circle.className = `w-5 h-5 rounded-full border text-[10px] font-bold flex items-center justify-center ${isLight ? 'border-zinc-400 text-zinc-700 bg-zinc-100' : 'border-zinc-500 text-zinc-200'}`;
@@ -1131,8 +1126,8 @@
         state.data.skills.forEach(s => {
           const pill = document.createElement('span');
           pill.className = isLight 
-            ? 'px-2 py-0.5 border border-violet-200 bg-violet-50 text-violet-800 text-[10px] font-mono rounded'
-            : 'px-2 py-0.5 border border-violet/30 bg-violet/10 text-lavender text-[10px] font-mono rounded';
+            ? 'px-2 py-0.5 border border-amber-300 bg-amber-50 text-[#080808] font-semibold text-[10px] font-mono rounded'
+            : 'px-2 py-0.5 border border-[#ffd500]/40 bg-[#ffd500]/15 text-[#ffd500] font-semibold text-[10px] font-mono rounded';
           pill.textContent = s;
           skillContainer.appendChild(pill);
         });
@@ -1201,7 +1196,7 @@
       state.data.mindset = mock.mindset;
       const charMeter = document.getElementById('char-meter');
       charMeter.textContent = `${mock.mindset.length} / 800 CHARACTERS`;
-      charMeter.classList.add('text-violet-600', 'dark:text-lavender');
+      charMeter.classList.add('text-amber-600', 'dark:text-[#ffd500]');
 
       document.getElementById('field-agree').checked = mock.agreed;
       state.data.agreed = mock.agreed;
@@ -1215,11 +1210,11 @@
       
       const isLight = htmlEl.classList.contains('light');
       if (isLight) {
-        btnMockFill.classList.add('bg-violet-600', 'text-white');
+        btnMockFill.classList.add('bg-[#ffd500]', 'text-[#080808]');
         btnMockFill.classList.remove('text-zinc-900', 'bg-zinc-100');
       } else {
-        btnMockFill.classList.add('bg-violet', 'text-white', 'shadow-[0_0_15px_rgba(114,0,243,0.5)]');
-        btnMockFill.classList.remove('text-violet-600', 'dark:text-lavender', 'bg-violet/15');
+        btnMockFill.classList.add('bg-[#ffd500]', 'text-[#080808]', 'shadow-[0_0_15px_rgba(255,213,0,0.6)]');
+        btnMockFill.classList.remove('text-amber-600', 'dark:text-[#ffd500]', 'bg-[#ffd500]/15');
       }
 
       anime({
@@ -1232,11 +1227,11 @@
       setTimeout(() => {
         btnMockFill.innerHTML = originalHTML;
         if (isLight) {
-          btnMockFill.classList.remove('bg-violet-600', 'text-white');
+          btnMockFill.classList.remove('bg-[#ffd500]', 'text-[#080808]');
           btnMockFill.classList.add('text-zinc-900', 'bg-zinc-100');
         } else {
-          btnMockFill.classList.remove('bg-violet', 'text-white', 'shadow-[0_0_15px_rgba(114,0,243,0.5)]');
-          btnMockFill.classList.add('text-violet-600', 'dark:text-lavender', 'bg-violet/15');
+          btnMockFill.classList.remove('bg-[#ffd500]', 'text-[#080808]', 'shadow-[0_0_15px_rgba(255,213,0,0.6)]');
+          btnMockFill.classList.add('text-amber-600', 'dark:text-[#ffd500]', 'bg-[#ffd500]/15');
         }
       }, 1600);
     }
@@ -1252,8 +1247,8 @@
       const count = 180;
       const isLight = htmlEl.classList.contains('light');
       const palette = isLight 
-        ? ['#7200f3', '#5a48f5', '#8b2df5', '#ff8044', '#fda77f', '#151414']
-        : ['#7200f3', '#8b2df5', '#d7b7fb', '#e7e4fe', '#ff8044', '#fda77f', '#f1f0ef'];
+        ? ['#ffd500', '#ffea75', '#ffb700', '#080808', '#ff8044', '#fda77f', '#151414']
+        : ['#ffd500', '#ffea75', '#ffb700', '#ffffff', '#ff8044', '#fda77f', '#f1f0ef'];
 
       for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
@@ -1365,11 +1360,11 @@
         const len = e.target.value.length;
         charMeter.textContent = `${len} / 800 CHARACTERS`;
         if (len >= 60) {
-          charMeter.classList.add('text-violet-600', 'dark:text-lavender');
+          charMeter.classList.add('text-amber-600', 'dark:text-[#ffd500]');
           charMeter.classList.remove('text-zinc-500', 'dark:text-zinc-400');
           document.getElementById('err-mindset').classList.add('hidden');
         } else {
-          charMeter.classList.remove('text-violet-600', 'dark:text-lavender');
+          charMeter.classList.remove('text-amber-600', 'dark:text-[#ffd500]');
           charMeter.classList.add('text-zinc-500', 'dark:text-zinc-400');
         }
       });
