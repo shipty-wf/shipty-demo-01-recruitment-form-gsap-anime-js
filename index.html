@@ -27,8 +27,8 @@
             slate: '#a8a6a5'
           },
           fontFamily: {
-            display: ['Syne', 'sans-serif'],
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            display: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace']
           }
         }
@@ -36,10 +36,10 @@
     }
   </script>
 
-  <!-- Typography: Syne + JetBrains Mono -->
+  <!-- Typography: Cormorant Garamond + Inter + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Animation Engines -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -52,7 +52,7 @@
     }
     html, body {
       overflow-x: hidden;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
@@ -597,13 +597,13 @@
               <div class="flex justify-between items-end font-mono">
                 <div>
                   <span class="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block">Expected Compensation</span>
-                  <span class="text-xs text-zinc-400 dark:text-zinc-500">Base salary target (USD)</span>
+                  <span class="text-xs text-zinc-400 dark:text-zinc-500">Monthly consultation fee (THB / ฿)</span>
                 </div>
                 <div class="text-right">
-                  <span id="val-salary" class="text-2xl font-display font-bold text-zinc-900 dark:text-white">$145,000</span>
+                  <span id="val-salary" class="text-2xl font-display font-bold text-zinc-900 dark:text-white">฿180,000</span>
                 </div>
               </div>
-              <input type="range" id="range-salary" min="80000" max="260000" value="145000" step="5000" 
+              <input type="range" id="range-salary" min="60000" max="600000" value="180000" step="10000" 
                 class="w-full h-1 bg-zinc-200 dark:bg-zinc-800 rounded-none appearance-none" data-cursor-label="DRAG">
             </div>
 
@@ -802,7 +802,7 @@
         role: '',
         experience: 4,
         skills: [],
-        salary: 145000,
+        salary: 180000,
         mindset: '',
         agreed: false
       }
@@ -1115,7 +1115,7 @@
       document.getElementById('sum-email').textContent = state.data.email || 'N/A';
       document.getElementById('sum-role').textContent = state.data.role || 'UNASSIGNED';
       document.getElementById('sum-exp-sal').textContent = 
-        `${state.data.experience} YRS EXP • $${Number(state.data.salary).toLocaleString()} USD`;
+        `${state.data.experience} YRS EXP • ฿${Number(state.data.salary).toLocaleString()} THB`;
 
       const skillContainer = document.getElementById('sum-skills');
       skillContainer.innerHTML = '';
@@ -1145,7 +1145,7 @@
         role: "AI Systems Specialist",
         experience: 8,
         skills: ["TypeScript", "Python", "FastAPI", "Docker", "PyTorch", "PostgreSQL"],
-        salary: 185000,
+        salary: 250000,
         mindset: "To mitigate cascading failures under a 10x traffic surge, I decouple ingestion with distributed Kafka partitions and implement token-bucket rate limiting at the Envoy ingress mesh. State writes are buffered in an asynchronous write-behind Redis tier with exponential backoff and circuit breakers protecting the underlying PostgreSQL cluster.",
         agreed: true
       };
@@ -1176,7 +1176,7 @@
       const rangeSalary = document.getElementById('range-salary');
       const valSalary = document.getElementById('val-salary');
       rangeSalary.value = mock.salary;
-      valSalary.textContent = `$${Number(mock.salary).toLocaleString()}`;
+      valSalary.textContent = `฿${Number(mock.salary).toLocaleString()}`;
       state.data.salary = mock.salary;
 
       state.data.skills = [...mock.skills];
@@ -1325,7 +1325,7 @@
       const rangeSalary = document.getElementById('range-salary');
       const valSalary = document.getElementById('val-salary');
       rangeSalary.addEventListener('input', (e) => {
-        valSalary.textContent = `$${Number(e.target.value).toLocaleString()}`;
+        valSalary.textContent = `฿${Number(e.target.value).toLocaleString()}`;
         state.data.salary = parseInt(e.target.value, 10);
       });
 
