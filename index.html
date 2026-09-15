@@ -30,7 +30,7 @@
     }
   </script>
 
-  <!-- Typography: Syne (Crency-style Editorial Display) + JetBrains Mono -->
+  <!-- Typography: Syne + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
@@ -40,7 +40,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
 
   <style>
-    /* Custom Cursor Reset */
     * {
       cursor: none !important;
     }
@@ -148,7 +147,7 @@
       will-change: transform;
     }
 
-    /* 3D Tilt Card Container */
+    /* 3D Tilt Card */
     .tilt-card {
       transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.15s ease-out;
       transform-style: preserve-3d;
@@ -175,7 +174,7 @@
       font-weight: 700;
     }
 
-    /* Styled Sliders */
+    /* Sliders */
     input[type="range"]::-webkit-slider-thumb {
       appearance: none;
       width: 16px;
@@ -236,11 +235,20 @@
       <div>STAGE: <span id="nav-stage-indicator" class="text-white font-bold">01_IDENTITY</span></div>
     </div>
 
-    <!-- Minimal Progress Dial -->
+    <!-- Right HUD: Mock Button & Progress -->
     <div class="flex items-center gap-3 font-mono text-xs">
-      <span class="text-zinc-500">[</span>
-      <span id="numeric-progress" class="text-acid font-bold">25%</span>
-      <span class="text-zinc-500">]</span>
+      <!-- Auto Fill Sample Button -->
+      <button type="button" id="btn-mock-fill" 
+        class="magnetic-action px-3 py-1.5 border border-acid/50 bg-acid/10 hover:bg-acid text-acid hover:text-noir text-[11px] font-mono font-bold tracking-wider rounded transition-all flex items-center gap-1.5"
+        data-cursor-label="INJECT">
+        <span>⚡ AUTO-FILL MOCK</span>
+      </button>
+
+      <div class="flex items-center gap-1">
+        <span class="text-zinc-500">[</span>
+        <span id="numeric-progress" class="text-acid font-bold">25%</span>
+        <span class="text-zinc-500">]</span>
+      </div>
     </div>
   </header>
 
@@ -404,7 +412,7 @@
               </div>
             </div>
 
-            <!-- Years Experience Slider with kinetic value -->
+            <!-- Years Experience Slider -->
             <div class="p-6 border border-white/10 bg-surface-card rounded-lg space-y-4">
               <div class="flex justify-between items-end font-mono">
                 <div>
@@ -426,7 +434,7 @@
               </div>
             </div>
 
-            <!-- Skill Badges with Crency-style Pill toggling -->
+            <!-- Skill Badges -->
             <div class="space-y-3">
               <div class="flex justify-between items-center font-mono">
                 <label class="text-[11px] text-zinc-400 tracking-wider uppercase">Select Core Toolchains (Min 2) *</label>
@@ -533,7 +541,7 @@
               </div>
             </div>
 
-            <!-- Crency-style Monospace Dossier Card -->
+            <!-- Monospace Dossier Card -->
             <div class="border border-white/10 bg-surface-card p-6 rounded-lg space-y-4 font-mono text-xs">
               <div class="flex justify-between items-center border-b border-white/5 pb-3">
                 <span class="text-zinc-500 uppercase tracking-widest">CANDIDATE</span>
@@ -667,6 +675,7 @@
     const btnBack = document.getElementById('btn-back');
     const btnNext = document.getElementById('btn-next');
     const btnDispatch = document.getElementById('btn-dispatch');
+    const btnMockFill = document.getElementById('btn-mock-fill');
     const numericProgress = document.getElementById('numeric-progress');
     const navStageIndicator = document.getElementById('nav-stage-indicator');
     const stepNavBtns = document.querySelectorAll('.step-nav-btn');
@@ -676,7 +685,7 @@
     const cursorLabel = document.getElementById('cursor-label');
     const ambientLight = document.getElementById('ambient-light');
 
-    // 1. Crency-Style Fluid Inertia Cursor with Lerp
+    // 1. Fluid Inertia Cursor with Lerp
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
     let ringX = mouseX;
@@ -687,11 +696,9 @@
       mouseX = e.clientX;
       mouseY = e.clientY;
       
-      // Immediate Dot Move
       cursorDot.style.left = `${mouseX}px`;
       cursorDot.style.top = `${mouseY}px`;
 
-      // Ambient radial spotlight follows pointer
       ambientLight.style.left = `${mouseX}px`;
       ambientLight.style.top = `${mouseY}px`;
     });
@@ -705,7 +712,6 @@
     }
     requestAnimationFrame(renderCursorLoop);
 
-    // Dynamic Cursor State Transformations
     function attachCursorInteractions() {
       const interactives = document.querySelectorAll('[data-cursor-label], input, button, .tilt-card, .pill-skill');
       
@@ -733,7 +739,7 @@
       });
     }
 
-    // 2. 3D Card Tilt Physics (Crency-style responsive perspective)
+    // 2. 3D Card Tilt Physics
     function setup3DTiltCards() {
       const cards = document.querySelectorAll('.tilt-card');
       cards.forEach(card => {
@@ -772,7 +778,7 @@
       });
     }
 
-    // 4. Kinetic Typography Entrance Animation (Mask Overflow Lines)
+    // 4. Kinetic Typography Entrance Animation
     function animateTextEntrance(stepIndex) {
       const view = document.getElementById(`view-step-${stepIndex}`);
       const lines = view.querySelectorAll('.mask-line');
@@ -788,7 +794,7 @@
       );
     }
 
-    // 5. Slide Navigation with GSAP Horizontal Inertia
+    // 5. Slide Navigation with GSAP
     function navigateToStep(targetIndex) {
       if (targetIndex < 0 || targetIndex >= state.totalSteps) return;
 
@@ -809,7 +815,6 @@
       }
     }
 
-    // Update HUD & Step Indicators
     function updateNavigationHUD() {
       const stages = ['01_IDENTITY', '02_STACK', '03_MINDSET', '04_SUMMARY'];
       navStageIndicator.textContent = stages[state.step];
@@ -817,14 +822,12 @@
       const pct = Math.round(((state.step + 1) / state.totalSteps) * 100);
       numericProgress.textContent = `${pct}%`;
 
-      // Back button visibility
       if (state.step === 0) {
         gsap.to(btnBack, { opacity: 0, pointerEvents: 'none', duration: 0.2 });
       } else {
         gsap.to(btnBack, { opacity: 1, pointerEvents: 'auto', duration: 0.2 });
       }
 
-      // Next vs Dispatch
       if (state.step === 3) {
         btnNext.classList.add('hidden');
         btnDispatch.classList.remove('hidden');
@@ -833,7 +836,6 @@
         btnDispatch.classList.add('hidden');
       }
 
-      // Nav Tabs
       stepNavBtns.forEach((btn, idx) => {
         const circle = btn.querySelector('span:first-child');
         if (idx === state.step) {
@@ -855,7 +857,6 @@
       });
     }
 
-    // Validation Guard
     function validateStep(stepIndex) {
       let valid = true;
 
@@ -932,7 +933,6 @@
       return valid;
     }
 
-    // Populate Review Dossier
     function populateDossier() {
       document.getElementById('sum-name').textContent = state.data.name || 'UNKNOWN';
       document.getElementById('sum-email').textContent = state.data.email || 'N/A';
@@ -956,7 +956,105 @@
       document.getElementById('sum-mindset').textContent = state.data.mindset || 'No response recorded.';
     }
 
-    // Crency-grade Particle Confetti Ring Explosion
+    // Auto-Fill Mock Functionality
+    function autoFillMockData() {
+      const mock = {
+        name: "Dr. Elena Rostova",
+        email: "elena.rostova@distributed-core.io",
+        github: "https://github.com/elena-rostova",
+        role: "AI Systems Specialist",
+        experience: 8,
+        skills: ["TypeScript", "Python", "FastAPI", "Docker", "PyTorch", "PostgreSQL"],
+        salary: 185000,
+        mindset: "To mitigate cascading failures under a 10x traffic surge, I decouple ingestion with distributed Kafka partitions and implement token-bucket rate limiting at the Envoy ingress mesh. State writes are buffered in an asynchronous write-behind Redis tier with exponential backoff and circuit breakers protecting the underlying PostgreSQL cluster.",
+        agreed: true
+      };
+
+      // 1. Step 1 Fields
+      document.getElementById('field-name').value = mock.name;
+      document.getElementById('field-email').value = mock.email;
+      document.getElementById('field-github').value = mock.github;
+      state.data.name = mock.name;
+      state.data.email = mock.email;
+      state.data.github = mock.github;
+
+      // Role Selection
+      const roleCards = document.querySelectorAll('.tilt-card');
+      roleCards.forEach(card => {
+        if (card.getAttribute('data-role') === mock.role) {
+          card.classList.add('tilt-card-active');
+          state.data.role = mock.role;
+        } else {
+          card.classList.remove('tilt-card-active');
+        }
+      });
+
+      // 2. Step 2 Fields
+      const rangeExp = document.getElementById('range-exp');
+      const valExp = document.getElementById('val-exp');
+      rangeExp.value = mock.experience;
+      valExp.textContent = String(mock.experience).padStart(2, '0');
+      state.data.experience = mock.experience;
+
+      const rangeSalary = document.getElementById('range-salary');
+      const valSalary = document.getElementById('val-salary');
+      rangeSalary.value = mock.salary;
+      valSalary.textContent = `$${Number(mock.salary).toLocaleString()}`;
+      state.data.salary = mock.salary;
+
+      // Skill Pills
+      state.data.skills = [...mock.skills];
+      const pills = document.querySelectorAll('.pill-skill');
+      pills.forEach(pill => {
+        const skill = pill.getAttribute('data-skill');
+        if (mock.skills.includes(skill)) {
+          pill.classList.add('selected');
+        } else {
+          pill.classList.remove('selected');
+        }
+      });
+      document.getElementById('skill-counter-badge').textContent = `${mock.skills.length} SELECTED`;
+
+      // 3. Step 3 Fields
+      const fieldMindset = document.getElementById('field-mindset');
+      fieldMindset.value = mock.mindset;
+      state.data.mindset = mock.mindset;
+      const charMeter = document.getElementById('char-meter');
+      charMeter.textContent = `${mock.mindset.length} / 800 CHARACTERS`;
+      charMeter.classList.add('text-acid');
+      charMeter.classList.remove('text-zinc-400');
+
+      // 4. Step 4 Agreement
+      document.getElementById('field-agree').checked = mock.agreed;
+      state.data.agreed = mock.agreed;
+
+      // Clear all error notices
+      document.querySelectorAll('[id^="err-"]').forEach(err => err.classList.add('hidden'));
+
+      // Update Dossier
+      populateDossier();
+
+      // Kinetic Feedback on the Button
+      const originalHTML = btnMockFill.innerHTML;
+      btnMockFill.innerHTML = '<span>✓ TELEMETRY INJECTED</span>';
+      btnMockFill.classList.add('bg-acid', 'text-noir');
+      btnMockFill.classList.remove('text-acid', 'bg-acid/10');
+
+      anime({
+        targets: btnMockFill,
+        scale: [0.92, 1.05, 1],
+        duration: 400,
+        easing: 'easeOutElastic(1, .6)'
+      });
+
+      setTimeout(() => {
+        btnMockFill.innerHTML = originalHTML;
+        btnMockFill.classList.remove('bg-acid', 'text-noir');
+        btnMockFill.classList.add('text-acid', 'bg-acid/10');
+      }, 1600);
+    }
+
+    // Particle Confetti Explosion
     function triggerSubmissionParticles() {
       const canvas = document.getElementById('confetti-canvas');
       const ctx = canvas.getContext('2d');
@@ -1012,6 +1110,9 @@
 
     // Event Bindings
     function initListeners() {
+      // Mock Fill Button
+      btnMockFill.addEventListener('click', autoFillMockData);
+
       // Role Selection Cards
       const roleCards = document.querySelectorAll('.tilt-card');
       roleCards.forEach(card => {
@@ -1021,7 +1122,6 @@
           state.data.role = card.getAttribute('data-role');
           document.getElementById('err-role').classList.add('hidden');
 
-          // Micro anime bounce
           anime({
             targets: card,
             scale: [0.97, 1],

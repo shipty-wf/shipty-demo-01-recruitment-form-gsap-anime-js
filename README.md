@@ -30,6 +30,7 @@
    - **Step 02 — Technical Depth**: Interactive tech stack pill selection, slider for years of experience, and target compensation range.
    - **Step 03 — Architecture & Philosophy**: Engineering scenario prompt with live character meter and thought-process framing.
    - **Step 04 — Review & Dispatch**: Live glassmorphic dossier card displaying entered profile data with animated confirmation.
+   - **⚡ Instant Demo Evaluation (Auto-Fill)**: One-click header pill (`⚡ AUTO-FILL MOCK`) instantly calibrates all 4 steps with candidate data, spring-animated skill tags, slider calibrations, and architecture narrative for frictionless review.
 
 ---
 
